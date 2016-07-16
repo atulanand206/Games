@@ -41,26 +41,33 @@ chance = 0
 ctr = 0
 while(ok and ctr<9):
 	print("Enter your move " + P[chance] + " (row col): ", end = "")
-	mv = list(map(int,((raw_input()).split(" "))))
-	move = 3*(mv[0]-1)+mv[1]
-	move = move-1
-	if(move>8 or move<0):
+	k = raw_input()
+	if (k == ""):
 		print("Invalid Move! Try Again")
 	else:
-		if(board[move]!=" "):
+		mv = list(map(int,(k.split(" "))))
+		if(len(mv)<2 or len(mv)>2):
 			print("Invalid Move! Try Again")
-		else:
-			if(chance==0):
-				board[move]="X"
+		else:	
+			move = 3*(mv[0]-1)+mv[1]
+			move = move-1
+			if(move>8 or move<0):
+				print("Invalid Move! Try Again")
 			else:
-				board[move]="O"
-			ctr+=1
-			tmp = sp.call('clear',shell=True)
-			print("Tic Tac Toe - 1.2")
-			print("We're playing " + P[0] + " vs. " + P[1])
-			printBoard()
-			ok = win(ok)
-			chance = 1-chance
+				if(board[move]!=" "):
+					print("Invalid Move! Try Again")
+				else:
+					if(chance==0):
+						board[move]="X"
+					else:
+						board[move]="O"
+					ctr+=1
+					tmp = sp.call('clear',shell=True)
+					print("Tic Tac Toe - 1.2")
+					print("We're playing " + P[0] + " vs. " + P[1])
+					printBoard()
+					ok = win(ok)
+					chance = 1-chance
 if(ctr==9 and ok==True):
 	print("Game Draw, Nobody Won!!")
 if(ok==False):
