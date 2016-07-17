@@ -2,18 +2,18 @@ from __future__ import print_function
 import subprocess as sp
 tmp = sp.call('clear',shell=True)
 board = [" "," "," "," "," "," "," "," "," "]
-version = "1.3"
+version = "1.4"
 def printBoard(board):
 	print(" ", end = "")
 	print(board[0],end = " | ")
 	print(board[1],end = " | ")
 	print(board[2],end = "\n")
-	print("-----------")
+	print("---|---|---")
 	print(" ", end = "")
 	print(board[3],end = " | ")
 	print(board[4],end = " | ")
 	print(board[5],end = "\n")
-	print("-----------")
+	print("---|---|---")
 	print(" ", end = "")
 	print(board[6],end = " | ")
 	print(board[7],end = " | ")
@@ -47,7 +47,6 @@ while(ok and ctr<9):
 		print("Invalid Move! Try Again")
 	else:
 		i = 1
-		print((k))
 		while (k[len(k)-1]==" "):
 			k = k[0:len(k)-1]
 		while(k[0]==" "):
@@ -64,7 +63,7 @@ while(ok and ctr<9):
 		else:	
 			move = 3*(mv[0]-1)+mv[1]
 			move = move-1
-			if(move>8 or move<0):
+			if((move>8 or move<0) or (mv[0]<1 or mv[0]>3) or (mv[1]<1 or mv[1]>3)):
 				print("Invalid Move! Try Again")
 			else:
 				if(board[move]!=" "):
