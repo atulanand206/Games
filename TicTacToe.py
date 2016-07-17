@@ -2,7 +2,8 @@ from __future__ import print_function
 import subprocess as sp
 tmp = sp.call('clear',shell=True)
 board = [" "," "," "," "," "," "," "," "," "]
-def printBoard():
+version = "1.3"
+def printBoard(board):
 	print(" ", end = "")
 	print(board[0],end = " | ")
 	print(board[1],end = " | ")
@@ -27,15 +28,15 @@ def win(ok):
 		return False
 	else:
 		return True
-print("Tic Tac Toe - 1.2")
+print("Tic Tac Toe - " + version)
 print("Enter First Player Name: ", end = "")
 p = raw_input()
 P = [p]
-print("Enter First Player Name: ", end = "")
+print("Enter Second Player Name: ", end = "")
 p = raw_input()
 P.append(p)
 print("Let's Play " + P[0] + " vs. " + P[1])
-printBoard()
+printBoard(board)
 ok = True
 chance = 0
 ctr = 0
@@ -45,7 +46,19 @@ while(ok and ctr<9):
 	if (k == ""):
 		print("Invalid Move! Try Again")
 	else:
-		mv = list(map(int,(k.split(" "))))
+		i = 1
+		print((k))
+		while (k[len(k)-1]==" "):
+			k = k[0:len(k)-1]
+		while(k[0]==" "):
+			k = k[1:len(k)]
+		c = ""
+		for i in range(0,len(k)):
+			if(k[i]!=" "):
+				c = c + k[i]
+			elif(k[i]==" " and k[i+1]!=" "):
+				c = c + k[i]
+		mv = list(map(int,(c.split(" "))))
 		if(len(mv)<2 or len(mv)>2):
 			print("Invalid Move! Try Again")
 		else:	
@@ -63,9 +76,9 @@ while(ok and ctr<9):
 						board[move]="O"
 					ctr+=1
 					tmp = sp.call('clear',shell=True)
-					print("Tic Tac Toe - 1.2")
+					print("Tic Tac Toe - " + version)
 					print("We're playing " + P[0] + " vs. " + P[1])
-					printBoard()
+					printBoard(board)
 					ok = win(ok)
 					chance = 1-chance
 if(ctr==9 and ok==True):
