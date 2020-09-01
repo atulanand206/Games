@@ -1,4 +1,4 @@
-package com.games.chess.ur;
+package com.games.chess;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

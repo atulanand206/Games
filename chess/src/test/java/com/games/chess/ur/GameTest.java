@@ -1,20 +1,9 @@
 package com.games.chess.ur;
 
-import com.games.chess.TestApplicationConfiguration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-//@ActiveProfiles("test")
-//@SpringBootTest(
-//        properties = "spring.main.allow-bean-definition-overriding=true",
-//        classes = {TestApplicationConfiguration.class})
-//@WebAppConfiguration
-//@AutoConfigureMockMvc
 public class GameTest {
 
     private Game game;
@@ -53,6 +42,20 @@ public class GameTest {
     }
 
     @Test
+    void possiblePlacesAfterRollingOne() {
+        game.roll(1);
+        Assertions.assertEquals(1, game.getPossiblePositionsForCurrentTurn().get(0));
+    }
+
+    @Test
+    void possiblePlacesAfterRollingOneTwoThree() {
+        game.roll(1);
+        game.roll(2);
+        game.roll(3);
+        Assertions.assertEquals(4, game.getPossiblePositionsForCurrentTurn().get(0));
+    }
+
+    @Test
     void rollOneTurn() {
         game.roll(5);
         String border1 = "| - - - - - - - |       | - - - |";
@@ -70,7 +73,6 @@ public class GameTest {
                 + botRow + "\n"
                 + border4;
         Assertions.assertEquals(boardStringToPrint, game.boardString());
-        game.printBoard();
     }
 
     @Test
@@ -93,7 +95,6 @@ public class GameTest {
                 + botRow + "\n"
                 + border4;
         Assertions.assertEquals(boardStringToPrint, game.boardString());
-        game.printBoard();
     }
 
     @Test
@@ -118,7 +119,6 @@ public class GameTest {
                 + botRow + "\n"
                 + border4;
         Assertions.assertEquals(boardStringToPrint, game.boardString());
-        game.printBoard();
     }
 
     private void roll() {

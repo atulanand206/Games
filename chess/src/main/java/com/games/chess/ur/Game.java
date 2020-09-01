@@ -36,6 +36,10 @@ public class Game {
         roll(nextRoll);
     }
 
+    private int getNextRoll() {
+        return new Random().nextInt(4);
+    }
+
     public void roll(int nextRoll) {
         playNextRoll(nextRoll);
         switchPlayer();
@@ -43,7 +47,20 @@ public class Game {
 
     private void playNextRoll(int nextRoll) {
         possiblePositionsForCurrentTurn = getPossiblePositions(nextRoll);
-        movePiece(0, nextRoll);
+        int indexOfThePieceToBeMoved = 0;
+        movePiece(indexOfThePieceToBeMoved, nextRoll);
+    }
+
+    public List<Integer> getPossiblePositionsForCurrentTurn() {
+        return possiblePositionsForCurrentTurn;
+    }
+
+    private List<Integer> getPossiblePositions(int nextRoll) {
+        return getPositionsForCurrentPlayer().stream().map(integer -> integer + nextRoll).distinct().collect(Collectors.toList());
+    }
+
+    private List<Integer> getPositionsForCurrentPlayer() {
+        return isFirstPlayer() ? firstPlayerPositions : secondPlayerPositions;
     }
 
     private void movePiece(int indexOfThePieceToBeMoved, int placesToMove) {
@@ -55,14 +72,6 @@ public class Game {
 
     private void movePlayerPiece(int indexOfThePieceToBeMoved, int placesToMove, List<Integer> firstPlayerPositions) {
         firstPlayerPositions.set(indexOfThePieceToBeMoved, placesToMove + firstPlayerPositions.get(indexOfThePieceToBeMoved));
-    }
-
-    private List<Integer> getPositionsForCurrentPlayer() {
-        return isFirstPlayer() ? firstPlayerPositions : secondPlayerPositions;
-    }
-
-    private int getNextRoll() {
-        return new Random(4).nextInt();
     }
 
     public void switchPlayer() {
@@ -85,11 +94,9 @@ public class Game {
         return board.getBoard(firstPlayerPositions, secondPlayerPositions);
     }
 
-    public List<Integer> getPossiblePositionsForCurrentTurn() {
-        return possiblePositionsForCurrentTurn;
-    }
-
-    private List<Integer> getPossiblePositions(int nextRoll) {
-        return getPositionsForCurrentPlayer().stream().map(integer -> integer + nextRoll).distinct().collect(Collectors.toList());
+    private void printList(List<Integer> list) {
+        for (Integer i : list)
+            System.out.print(i + ", ");
+        System.out.println();
     }
 }
