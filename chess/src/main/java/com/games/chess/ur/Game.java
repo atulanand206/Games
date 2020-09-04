@@ -70,11 +70,11 @@ public class Game {
             movePlayerPiece(indexOfThePieceToBeMoved, placesToMove, secondPlayerPositions);
     }
 
-    private void movePlayerPiece(int indexOfThePieceToBeMoved, int placesToMove, List<Integer> firstPlayerPositions) {
-        firstPlayerPositions.set(indexOfThePieceToBeMoved, placesToMove + firstPlayerPositions.get(indexOfThePieceToBeMoved));
+    private void movePlayerPiece(int indexOfThePieceToBeMoved, int placesToMove, List<Integer> playerPositions) {
+        playerPositions.set(indexOfThePieceToBeMoved, placesToMove + playerPositions.get(indexOfThePieceToBeMoved));
     }
 
-    public void switchPlayer() {
+    private void switchPlayer() {
         currentPlayer = isFirstPlayer() ? 1 : 0;
     }
 

@@ -35,12 +35,9 @@ public class Board {
         this.secondPlayerPositions.addAll(secondPlayerPositions);
     }
     public String currentBoard() {
-        String border1 = getOuterBorder();
-        String border2 = getInnerBorder();
-        String topRow  = getTopRow();
-        String midRow  = getMidRow();
-        String botRow  = getBotRow();
-        return border1 + "\n" + topRow + "\n" + border2 + "\n" + midRow + "\n" + border2 + "\n" + botRow + "\n" + border1;
+        return getOuterBorder() + "\n" + getTopRow()
+                + "\n" + getInnerBorder() + "\n" + getMidRow() + "\n" + getInnerBorder()
+                + "\n" + getBotRow() + "\n" + getOuterBorder();
     }
 
     private String getOuterBorder() {
