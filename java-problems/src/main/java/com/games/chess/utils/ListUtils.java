@@ -14,12 +14,21 @@ public class ListUtils {
         return Arrays.asList(integers);
     }
 
+    public static List<String> listOf(String... ints) {
+        String[] integers = new String[ints.length];
+        System.arraycopy(ints, 0, integers, 0, ints.length);
+
+        for (int i = 0;i<ints.length;i++)
+            integers[i] = ints[i];
+        return Arrays.asList(integers);
+    }
+
     public static List<Integer> intList(Integer... i) {
         return Arrays.asList(i);
     }
 
-    public static void print(List<Integer> list) {
-        for (Integer in : list)
+    public static <T> void print(List<T> list) {
+        for (T in : list)
             System.out.print(in + ", ");
         System.out.println();
     }
