@@ -1,7 +1,6 @@
 package filter.captainprime
 
 
-
 object Solution {
 
   class CaptainPrime() {
@@ -23,14 +22,15 @@ object Solution {
     private def initializePrimeBooleanBuffer(limit: Int) = {
       val primesArray = new ArrayBuffer[Boolean]()
       primesArray.append(false)
-      for (_ <- 1 to limit)
+      primesArray.append(false)
+      for (_ <- 2 to limit)
         primesArray.append(true)
       primesArray
     }
 
     private def determinePrimesForArray(limit: BigInt, primesArray: ArrayBuffer[Boolean]): Unit = {
       import scala.math.BigInt.int2bigInt
-      for (p:BigInt <- 2 to limit if p * p <= limit)
+      for (p <- 2 to limit if p * p <= limit)
         if (primesArray(p.intValue))
           for (i <- p * p to limit by p if i <= limit && p * p > 0)
             primesArray(i.intValue) = false
@@ -102,11 +102,11 @@ object Solution {
     }
 
     def isLeft(x: Int): Boolean = {
-      stripFromBegin(x) && !primes(removeFromEnd(x))
+      stripFromBegin(x) && !stripFromEnd(x)
     }
 
     def isRight(x: Int): Boolean = {
-      stripFromEnd(x) && !primes(removeFromBegin(x))
+      stripFromEnd(x) && !stripFromBegin(x)
     }
 
     def fates(x: Int): Fate = {

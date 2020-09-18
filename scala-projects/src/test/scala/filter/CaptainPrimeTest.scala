@@ -116,23 +116,30 @@ class CaptainPrimeTest extends WordSpec with BeforeAndAfter {
 
   "failing test case" in {
     captainPrime.generatePrimesForComparison(1000000)
-    val input = "7853\n337853\n392647\n537853\n297523\n5653\n7\n3823\n86113\n789137\n83617\n638317\n43\n861613\n61223\n43\n932647\n37\n242797\n918443\n9743\n2113\n962683\n33347\n92347\n29137\n4967\n5647\n6397\n5953"
-    val output = "LEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nCENTRAL\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nCENTRAL\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT\nLEFT"
+    val input = "37337\n73\n373393\n2393\n239933\n79\n599\n373\n31379\n71\n31379\n59393\n2399"
+    val output = "RIGHT\nCENTRAL\nRIGHT\nRIGHT\nRIGHT\nRIGHT\nRIGHT\nCENTRAL\nRIGHT\nRIGHT\nRIGHT\nRIGHT\nRIGHT"
     val failInput = "337853\n"
     val failOutput = "LEFT\n"
     captainPrimeTestCase(input, output)
-    //    captainPrimeTestCase("861613", "LEFT")
+    println(captainPrime.primes(71))
+    println(captainPrime.primes(7))
+    println(captainPrime.primes(1))
+    println(captainPrime.primes(861))
+    println(captainPrime.primes(86))
+    println(captainPrime.primes(8))
+    captainPrimeTestCase("861613", "LEFT")
+
   }
 
-  private def captainPrimeTestCase(againstStrings: String, resultsStrings: String): Unit = {
-    val againstStringsArray = againstStrings.split("\n")
+  private def captainPrimeTestCase(inputStrings: String, resultsStrings: String): Unit = {
+    val inputStringsArray = inputStrings.split("\n")
     val resultStringsArray = resultsStrings.split("\n")
-    println(againstStringsArray.length)
+    println(inputStringsArray.length)
     println(resultStringsArray.length)
-    for (i <- 0 until againstStringsArray.length) {
-      val inpt = againstStringsArray(i).toInt
-      println(i -> againstStringsArray(i).toInt -> resultStringsArray(i))
-      assert(resultStringsArray(i) == captainPrime.fate(inpt))
+    for (i <- 0 until inputStringsArray.length) {
+      val input = inputStringsArray(i).toInt
+      println(i, inputStringsArray(i).toInt, resultStringsArray(i), captainPrime.fate(input))
+      assert(resultStringsArray(i) == captainPrime.fate(input))
     }
   }
 }
