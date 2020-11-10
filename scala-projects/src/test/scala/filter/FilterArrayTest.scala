@@ -48,6 +48,7 @@ class FilterArrayTest extends WordSpec {
 
   "rotate strings" in {
     assert(new RotateStrings().rotatedStrings("abcde") == "bcdea cdeab deabc eabcd abcde ")
+    print(new RotateStrings().rotatedStrings("qwertyuiopasdfghjklmnbvcxzzxcvbm"))
   }
 
   "remove duplicates" in {

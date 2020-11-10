@@ -24,6 +24,9 @@ class FibonacciTest extends WordSpec with BeforeAndAfter {
     assertFiboAtIndex(10000, 49520320)
   }
 
+  // 1, 1, 2, 3,5,8,13
+  // 0,1,1,2,3,5
+  // 0,0,1,2,3,5
   "fibonacci 0" in assertFiboAtIndex(0, 0)
   "fibonacci 1" in assertFiboAtIndex(1, 1)
   "fibonacci 2" in assertFiboAtIndex(2, 1)
