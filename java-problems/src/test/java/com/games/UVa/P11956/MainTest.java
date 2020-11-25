@@ -1,5 +1,6 @@
 package com.games.UVa.P11956;
 
+import com.games.Utils;
 import org.junit.jupiter.api.Test;
 
 import static com.games.UVa.P11956.Main.getState;
@@ -25,26 +26,20 @@ class MainTest {
 
   @Test
   void testGetState() {
-    assertSame(new int[]{1, 0, 0, 0, 0, 0, 0, 0, 0, 0}, getState("+", 10));
-    assertSame(new int[]{2, 0, 0, 0, 0, 0, 0, 0, 0, 0}, getState("++", 10));
-    assertSame(new int[]{2, 0, 0, 0, 0, 0, 0, 0, 0, 0}, getState("++>", 10));
-    assertSame(new int[]{2, 1, 0, 0, 0, 0, 0, 0, 0, 0}, getState("++>+", 10));
-    assertSame(new int[]{2, 1, 0, 0, 0, 0, 0, 0, 0, 1}, getState("++>+<<+", 10));
-    assertSame(new int[]{2, 1, 0, 0, 0, 0, 0, 0, 255, 1}, getState("++>+<<+<-", 10));
-    assertSame(new int[]{2, 1, 0, 0, 0, 0, 0, 0, 255, 1}, getState("++...>+<<+<-", 10));
-    assertSame(new int[]{2, 1, 0, 0, 0, 0, 0, 0, 253, 1}, getState("++...>+<<+<---", 10));
-    assertSame(new int[]{2, 1, 0, 0, 0, 0, 0, 0, 0, 1}, getState("++...>+<<+<---+++", 10));
-    assertSame(new int[]{3, 1, 255, 0, 0, 0, 0, 0, 0, 1}, getState("++...>+<<+<---+++>>+>>-", 10));
-    assertSame(new int[]{3, 1, 0, 0, 0, 0, 0, 0, 0, 1}, getState("++...>+<<+<---+++>>+>>-+", 10));
-    assertSame(new int[]{3, 1, 1, 0, 0, 0, 0, 0, 0, 1}, getState("++...>+<<+<---+++>>+>>-++", 10));
-    assertSame(new int[]{2, 1, 1, 0, 0, 0, 0, 0, 0, 1}, getState("++...>+<<+<---+++>>+>>-++<<-", 10));
-    assertSame(new int[]{2, 1, 1, 0, 0, 0, 0, 0, 0, 255}, getState("++...>+<<+<-...--+++>>+>>-+....+<<-<--", 10));
-  }
-
-  void assertSame(int[] a1, int[] a2) {
-    assertEquals(a2.length, a1.length);
-    for (int i = 0; i < a1.length; i++)
-      assertEquals(a1[i], a2[i]);
+    Utils.assertSameArray(new int[]{1, 0, 0, 0, 0, 0, 0, 0, 0, 0}, getState("+", 10));
+    Utils.assertSameArray(new int[]{2, 0, 0, 0, 0, 0, 0, 0, 0, 0}, getState("++", 10));
+    Utils.assertSameArray(new int[]{2, 0, 0, 0, 0, 0, 0, 0, 0, 0}, getState("++>", 10));
+    Utils.assertSameArray(new int[]{2, 1, 0, 0, 0, 0, 0, 0, 0, 0}, getState("++>+", 10));
+    Utils.assertSameArray(new int[]{2, 1, 0, 0, 0, 0, 0, 0, 0, 1}, getState("++>+<<+", 10));
+    Utils.assertSameArray(new int[]{2, 1, 0, 0, 0, 0, 0, 0, 255, 1}, getState("++>+<<+<-", 10));
+    Utils.assertSameArray(new int[]{2, 1, 0, 0, 0, 0, 0, 0, 255, 1}, getState("++...>+<<+<-", 10));
+    Utils.assertSameArray(new int[]{2, 1, 0, 0, 0, 0, 0, 0, 253, 1}, getState("++...>+<<+<---", 10));
+    Utils.assertSameArray(new int[]{2, 1, 0, 0, 0, 0, 0, 0, 0, 1}, getState("++...>+<<+<---+++", 10));
+    Utils.assertSameArray(new int[]{3, 1, 255, 0, 0, 0, 0, 0, 0, 1}, getState("++...>+<<+<---+++>>+>>-", 10));
+    Utils.assertSameArray(new int[]{3, 1, 0, 0, 0, 0, 0, 0, 0, 1}, getState("++...>+<<+<---+++>>+>>-+", 10));
+    Utils.assertSameArray(new int[]{3, 1, 1, 0, 0, 0, 0, 0, 0, 1}, getState("++...>+<<+<---+++>>+>>-++", 10));
+    Utils.assertSameArray(new int[]{2, 1, 1, 0, 0, 0, 0, 0, 0, 1}, getState("++...>+<<+<---+++>>+>>-++<<-", 10));
+    Utils.assertSameArray(new int[]{2, 1, 1, 0, 0, 0, 0, 0, 0, 255}, getState("++...>+<<+<-...--+++>>+>>-+....+<<-<--", 10));
   }
 
   @Test
