@@ -92,7 +92,7 @@ public class Main {
   }
 
   public static String printDividerRow(int size) {
-    return "+" + "-".repeat(size * 2 - 1) + "+";
+    return "+" + new String(new char[size * 2 - 1]).replace("\0", "-") + "+";
   }
 
   public static void printCase(int i) {

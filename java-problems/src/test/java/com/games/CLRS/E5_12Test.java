@@ -6,7 +6,7 @@ class E5_12Test {
 
   @Test
   void testRandom() {
-    final var e512 = new E5_12();
+    final E5_12 e512 = new E5_12();
     System.out.printf("%.0f\n", e512.random(10, 32));
     System.out.printf("%.0f\n", e512.random(43, 32));
     System.out.printf("%.0f\n", e512.random(12, 24));

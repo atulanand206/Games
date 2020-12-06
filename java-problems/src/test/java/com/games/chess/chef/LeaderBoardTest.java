@@ -48,7 +48,7 @@ public class LeaderBoardTest {
     }
 
     private static int numberOfAnagrams(Map<Map<Character, Integer>, Integer> dictionary, String query) {
-        var count = dictionary.entrySet().stream().filter(word -> isAnagram(word.getKey(), query)).mapToLong(Map.Entry::getValue).sum();
+        long count = dictionary.entrySet().stream().filter(word -> isAnagram(word.getKey(), query)).mapToLong(Map.Entry::getValue).sum();
         return (int) count;
     }
 
