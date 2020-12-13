@@ -17,4 +17,10 @@ public class Utils {
         for (int i = 0; i < a1.size(); i++)
             assertEquals(a1.get(i), a2.get(i));
     }
+
+    public static <T> void assertSame2DList(List<List<T>> l1, List<List<T>> l2) {
+        assertEquals(l1.size(), l2.size());
+        for (int i = 0; i < l1.size(); i++)
+            assertSameList(l1.get(i), l2.get(i));
+    }
 }
