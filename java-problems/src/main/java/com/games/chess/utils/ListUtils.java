@@ -25,6 +25,13 @@ public class ListUtils {
         return Arrays.asList(i);
     }
 
+    public static List<Integer> intList(List<String> list) {
+        List<Integer> result = new ArrayList<>();
+        for (String str : list)
+            result.add(Integer.parseInt(str));
+        return result;
+    }
+
     public static <T> void print(List<T> list) {
         for (T in : list)
             System.out.print(in + ", ");
@@ -65,6 +72,72 @@ public class ListUtils {
         System.out.println();
     }
 
+    public static void printDp(int[][] dp, int[] list) {
+        int digitsInMax = digitsInPair(max(dp), min(dp));
+        System.out.printf("%s ", formatted(digitsInMax, "-"));
+        System.out.printf("%s ", formatted(digitsInMax, "-"));
+        printFormatted(digitsInMax, list);
+        for (int i = 0; i < dp.length; i++) {
+            System.out.printf("%s ", i > 0 ? formatted(digitsInMax, list[i - 1]) : formatted(digitsInMax, "-"));
+            for (int item : dp[i])
+                System.out.printf("%s ", formatted(digitsInMax, item));
+            System.out.println();
+        }
+    }
+
+    public static void printFormatted(int digitsInMax, int[] list) {
+        for (int in : list)
+            System.out.printf("%s ", formatted(digitsInMax, in));
+        System.out.println();
+    }
+
+    private static String formatted(int digitsInMax, int num) {
+        return String.format("%" + digitsInMax + "d", num);
+    }
+
+    private static String formatted(int digitsInMax, String num) {
+        return String.format("%" + digitsInMax + "s", num);
+    }
+
+    private static int digitsInPair(int max, int min) {
+        return Math.max(digitsInNumber(max), digitsInNumber(min));
+    }
+
+    private static int digitsInNumber(int max) {
+        if (max > 0) {
+            return digitsInPositiveInteger(max);
+        } else if (max == 0)
+            return 1;
+        else {
+            return 1 + digitsInPositiveInteger(Math.abs(max));
+        }
+    }
+
+    private static int digitsInPositiveInteger(int max) {
+        int i = 0;
+        while (max > 0) {
+            max = max / 10;
+            i++;
+        }
+        return i;
+    }
+
+    private static int max(int[][] dp) {
+        int max = Integer.MIN_VALUE;
+        for (int[] r : dp)
+            for (int i : r)
+                max = Math.max(i, max);
+        return max;
+    }
+
+    private static int min(int[][] dp) {
+        int min = Integer.MAX_VALUE;
+        for (int[] r : dp)
+            for (int i : r)
+                min = Math.min(i, min);
+        return min;
+    }
+
     public static List<List<Integer>> list2DOf(String str) {
         List<List<Integer>> lists = new ArrayList<>();
         if (str.isEmpty())
@@ -99,6 +172,10 @@ public class ListUtils {
             array[i++] = tsi;
         }
         return array;
+    }
+
+    public static int[][] array2DOf(String str) {
+        return array2DOf(list2DOf(str));
     }
 
     public static List<List<Integer>> list2DOf(int[][] arrays) {

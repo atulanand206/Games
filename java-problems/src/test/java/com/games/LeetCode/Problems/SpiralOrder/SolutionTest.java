@@ -1,5 +1,6 @@
 package com.games.LeetCode.Problems.SpiralOrder;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,6 +14,7 @@ class SolutionTest {
         List<Integer> list = new Solution().spiralOrder(matrix);
         System.out.println(combine(matrix));
         System.out.println(combine(result));
+        Assertions.assertEquals(combine(matrix), combine(result));
         System.out.println(combine(list));
     }
 
@@ -23,6 +25,7 @@ class SolutionTest {
         List<Integer> list = new Solution().spiralOrder(matrix);
         System.out.println(combine(matrix));
         System.out.println(combine(result));
+        Assertions.assertEquals(combine(matrix), combine(result));
         System.out.println(combine(list));
     }
 
