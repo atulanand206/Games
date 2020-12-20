@@ -17,7 +17,15 @@ func AssertEqualMessage(t *testing.T, a interface{}, b interface{}, message stri
 	t.Fatal(message)
 }
 
-func AssertEqual(t *testing.T, a string, b string) {
+func AssertEquals(t *testing.T, a interface{}, b interface{}) {
+	t.Helper()
+	if a == b {
+		return
+	}
+	t.Errorf("got %q want %q", a, b)
+}
+
+func AssertEqual(t *testing.T, a interface{}, b interface{}) {
 	t.Helper()
 	if a == b {
 		return
@@ -52,6 +60,30 @@ func AssertEqualSlices(t *testing.T, a []int, b []int) {
 	if !reflect.DeepEqual(a, b) {
 		t.Errorf("got %v want %v", a, b)
 	}
+}
+
+func AssertEqual2DSlices(t *testing.T, a [][]int, b [][]int) {
+	t.Helper()
+	if len(a) != len(b) {
+		t.Error("size mismatch")
+	}
+	for i := 0; i < len(a); i++ {
+		fmt.Println(i)
+		AssertEqualSlices(t, a[i], b[i])
+	}
+}
+
+func AssertEqualStringSlices(t *testing.T, a []string, b []string) {
+	t.Helper()
+	if !reflect.DeepEqual(a, b) {
+		t.Errorf("got %v want %v", a, b)
+	}
+}
+
+func AssertSearch(t *testing.T, ok error, definition string, wantError error, wantDefinition string) {
+	t.Helper()
+	AssertEquals(t, ok, wantError)
+	AssertEqual(t, definition, wantDefinition)
 }
 
 func Bench(b *testing.B, f func()) {
