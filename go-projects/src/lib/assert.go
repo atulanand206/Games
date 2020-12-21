@@ -80,10 +80,30 @@ func AssertEqualStringSlices(t *testing.T, a []string, b []string) {
 	}
 }
 
+func AssertDeepEqual(t *testing.T, a interface{}, b interface{}) {
+	t.Helper()
+	if !reflect.DeepEqual(a, b) {
+		t.Errorf("got %v want %v", a, b)
+	}
+}
+
 func AssertSearch(t *testing.T, ok error, definition string, wantError error, wantDefinition string) {
 	t.Helper()
 	AssertEquals(t, ok, wantError)
 	AssertEqual(t, definition, wantDefinition)
+}
+
+func AssertContains(t *testing.T, haystack []string, needle string)  {
+	t.Helper()
+	contains := false
+	for _, x := range haystack {
+		if x == needle {
+			contains = true
+		}
+	}
+	if !contains {
+		t.Errorf("expected %+v to contain %q but it didn't", haystack, needle)
+	}
 }
 
 func Bench(b *testing.B, f func()) {
