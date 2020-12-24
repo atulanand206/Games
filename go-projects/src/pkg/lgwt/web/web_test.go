@@ -11,6 +11,7 @@ import (
 type StubPlayerStore struct {
 	scores   map[string]int
 	winCalls []string
+	league []Player
 }
 
 func (s *StubPlayerStore) getPlayerScore(player string) int {
@@ -22,13 +23,17 @@ func (s *StubPlayerStore) RecordWin(player string) {
 	s.winCalls = append(s.winCalls, player)
 }
 
+func (s *StubPlayerStore) GetLeague() []Player {
+	return s.league
+}
+
 func TestGetPlayers(t *testing.T) {
 	store := StubPlayerStore{
 		map[string]int{
 			"Angelina": 20,
 			"Floyd":    10,
 		},
-		nil,
+		nil, nil,
 	}
 	cases := []struct {
 		player string
@@ -37,7 +42,7 @@ func TestGetPlayers(t *testing.T) {
 		{"Angelina", 20},
 		{"Floyd", 10},
 	}
-	server := &PlayerServer{&store}
+	server := NewPlayerServer(&store)
 	for _, c := range cases {
 		t.Run(testName(c.player), func(t *testing.T) {
 			request := getRequest(c.player)
@@ -57,7 +62,7 @@ func TestGetPlayers(t *testing.T) {
 
 func TestPostPlayers(t *testing.T) {
 	store := StubPlayerStore{
-		map[string]int{}, []string{},
+		map[string]int{}, []string{}, nil,
 	}
 	cases := []struct {
 		player string
@@ -66,7 +71,7 @@ func TestPostPlayers(t *testing.T) {
 		{"Angelina", 20},
 		{"Floyd", 10},
 	}
-	server := &PlayerServer{&store}
+	server := NewPlayerServer(&store)
 	for _, c := range cases {
 		t.Run(testName(c.player), func(t *testing.T) {
 			request := postRequest(c.player)

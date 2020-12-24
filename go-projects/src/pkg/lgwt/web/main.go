@@ -7,7 +7,7 @@ import (
 
 func main() {
 	store := NewInMemoryPlayerStore()
-	server := &PlayerServer{store}
+	server := NewPlayerServer(store)
 	handler := http.HandlerFunc(server.ServeHTTP)
 	serve := http.ListenAndServe(":5000", handler)
 	if serve != nil {

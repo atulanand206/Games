@@ -1,10 +1,12 @@
 package main
 
-import "sync"
+import (
+	"sync"
+)
 
 type InMemoryPlayerStore struct {
 	store map[string]int
-	lock sync.RWMutex
+	lock  sync.RWMutex
 }
 
 func NewInMemoryPlayerStore() *InMemoryPlayerStore {
@@ -21,4 +23,14 @@ func (i *InMemoryPlayerStore) RecordWin(player string) {
 	i.lock.RLock()
 	defer i.lock.RUnlock()
 	i.store[player]++
+}
+
+func (i *InMemoryPlayerStore) GetLeague() []Player {
+	i.lock.Lock()
+	defer i.lock.Unlock()
+	var players []Player
+	for k, v := range i.store {
+		players = append(players, Player{k, v})
+	}
+	return players
 }
