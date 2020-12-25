@@ -8,7 +8,12 @@ import (
 )
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
-	store := NewInMemoryPlayerStore()
+	database, cleanDatabase := createTempFile(t, `[
+            {"Name": "Cleo", "Wins": 10},
+            {"Name": "Chris", "Wins": 33}]`)
+	defer cleanDatabase()
+	store := NewFileSystemPlayerStore(database)
+
 	server := NewPlayerServer(store)
 	player := "Tony"
 
@@ -29,6 +34,8 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		AssertStatus(t, response, http.StatusOK)
 		AssertContentType(t, response)
 		wantedLeague := []Player{
+			{"Cleo", 10},
+			{"Chris", 33},
 			{"Tony", 3},
 		}
 		AssertLeague(t, response, wantedLeague)

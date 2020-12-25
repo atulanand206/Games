@@ -35,6 +35,7 @@ func getLeagueRequest() *http.Request {
 }
 
 func AssertLeague(t *testing.T, response *httptest.ResponseRecorder, wantedLeague []Player) {
+	t.Helper()
 	got := getLeagueFromResponse(t, response)
 	lib.AssertDeepEqual(t, got, wantedLeague)
 }

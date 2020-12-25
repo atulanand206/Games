@@ -25,7 +25,7 @@ func (i *InMemoryPlayerStore) RecordWin(player string) {
 	i.store[player]++
 }
 
-func (i *InMemoryPlayerStore) GetLeague() []Player {
+func (i *InMemoryPlayerStore) GetLeague() League {
 	i.lock.Lock()
 	defer i.lock.Unlock()
 	var players []Player
