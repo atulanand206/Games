@@ -4,14 +4,13 @@ import (
 	"testing"
 	"net/http"
 	"net/http/httptest"
-	"lib"
 	"fmt"
 )
 
 type StubPlayerStore struct {
 	scores   map[string]int
 	winCalls []string
-	league League
+	league   League
 }
 
 func (s *StubPlayerStore) getPlayerScore(player string) int {
@@ -48,15 +47,15 @@ func TestGetPlayers(t *testing.T) {
 			request := getRequest(c.player)
 			response := httptest.NewRecorder()
 			server.ServeHTTP(response, request)
-			lib.AssertEqual(t, response.Body.String(), fmt.Sprint(c.score))
-			lib.AssertEqualIntegers(t, response.Code, http.StatusOK)
+			AssertEqual(t, response.Body.String(), fmt.Sprint(c.score))
+			AssertEqualIntegers(t, response.Code, http.StatusOK)
 		})
 	}
 	t.Run("404 on missing player", func(t *testing.T) {
 		request := getRequest("Apollo")
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, request)
-		lib.AssertEqualIntegers(t, response.Code, http.StatusNotFound)
+		AssertEqualIntegers(t, response.Code, http.StatusNotFound)
 	})
 }
 
@@ -77,21 +76,10 @@ func TestPostPlayers(t *testing.T) {
 			request := postRequest(c.player)
 			response := httptest.NewRecorder()
 			server.ServeHTTP(response, request)
-			lib.AssertEqualIntegers(t, response.Code, http.StatusAccepted)
-			if !contains(store, c.player) {
-				t.Errorf("%s score not present in the store", c.player)
-			}
+			AssertEqualIntegers(t, response.Code, http.StatusAccepted)
+			AssertPlayerInStore(t, store.winCalls, c)
 		})
 	}
-}
-
-func contains(store StubPlayerStore, player string) bool {
-	for _, call := range store.winCalls {
-		if call == player {
-			return true
-		}
-	}
-	return false
 }
 
 func getRequest(player string) (*http.Request) {

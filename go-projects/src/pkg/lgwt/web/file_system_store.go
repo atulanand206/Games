@@ -1,19 +1,39 @@
 package main
 
 import (
-	"io"
 	"encoding/json"
+	"os"
+	"fmt"
 )
 
 type FileSystemPlayerStore struct {
-	database io.ReadWriteSeeker
+	database *json.Encoder
 	league   League
 }
 
-func NewFileSystemPlayerStore(database io.ReadWriteSeeker) *FileSystemPlayerStore {
-	database.Seek(0, 0)
-	league, _ := NewLeague(database)
-	return &FileSystemPlayerStore{database, league}
+func initializePlayerDBFile(file *os.File) error {
+	file.Seek(0, 0)
+	info, err := file.Stat()
+	if err != nil {
+		return fmt.Errorf("problem getting file info from file %s, %v", file.Name(), err)
+	}
+	if info.Size() == 0 {
+		file.Write([]byte("[]"))
+		file.Seek(0, 0)
+	}
+	return nil
+}
+
+func NewFileSystemPlayerStore(file *os.File) (*FileSystemPlayerStore, error) {
+	err := initializePlayerDBFile(file)
+	if err != nil {
+		return nil, fmt.Errorf("problem initializing player db file, %v", err)
+	}
+	league, err := NewLeague(file)
+	if err != nil {
+		return nil, fmt.Errorf("problem loading player store from file %s, %v", file.Name(), err)
+	}
+	return &FileSystemPlayerStore{json.NewEncoder(&Tape{file}), league}, nil
 }
 
 func (i *FileSystemPlayerStore) getPlayerScore(player string) int {
@@ -31,8 +51,7 @@ func (i *FileSystemPlayerStore) RecordWin(player string) {
 	} else {
 		i.league = append(i.league, Player{player, 1})
 	}
-	i.database.Seek(0, 0)
-	json.NewEncoder(i.database).Encode(i.league)
+	i.database.Encode(i.league)
 }
 
 func (i *FileSystemPlayerStore) GetLeague() League {

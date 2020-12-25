@@ -3,7 +3,6 @@ package main
 import (
 	"testing"
 	"net/http/httptest"
-	"lib"
 	"net/http"
 )
 
@@ -12,7 +11,8 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
             {"Name": "Cleo", "Wins": 10},
             {"Name": "Chris", "Wins": 33}]`)
 	defer cleanDatabase()
-	store := NewFileSystemPlayerStore(database)
+	store, err := NewFileSystemPlayerStore(database)
+	AssertNoError(t, err)
 
 	server := NewPlayerServer(store)
 	player := "Tony"
@@ -25,7 +25,7 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, getRequest(player))
 		AssertStatus(t, response, http.StatusOK)
-		lib.AssertEqual(t, response.Body.String(), "3")
+		AssertEqual(t, response.Body.String(), "3")
 	})
 
 	t.Run("get league", func(t *testing.T) {

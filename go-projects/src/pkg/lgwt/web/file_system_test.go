@@ -2,8 +2,6 @@ package main
 
 import (
 	"testing"
-	"lib"
-	"io"
 	"io/ioutil"
 	"os"
 )
@@ -14,7 +12,8 @@ func TestFileSystemStore(t *testing.T) {
             {"Name": "Cleo", "Wins": 10},
             {"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
-		store := NewFileSystemPlayerStore(database)
+		store, err := NewFileSystemPlayerStore(database)
+		AssertNoError(t, err)
 
 		got := store.GetLeague()
 
@@ -23,23 +22,24 @@ func TestFileSystemStore(t *testing.T) {
 			{"Chris", 33},
 		}
 
-		lib.AssertDeepEqual(t, got, want)
+		AssertDeepEqual(t, got, want)
 
 		got = store.GetLeague()
-		lib.AssertDeepEqual(t, got, want)
+		AssertDeepEqual(t, got, want)
 	})
 
 	t.Run("get player score", func(t *testing.T) {
-		database, cleanDatabase := createTempFile(t,`[
+		database, cleanDatabase := createTempFile(t, `[
             {"Name": "Cleo", "Wins": 10},
             {"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
-		store := NewFileSystemPlayerStore(database)
+		store, err := NewFileSystemPlayerStore(database)
+		AssertNoError(t, err)
 
 		got := store.getPlayerScore("Cleo")
 
 		want := 10
-		lib.AssertEqualIntegers(t, got, want)
+		AssertEqualIntegers(t, got, want)
 	})
 
 	t.Run("store wins for existing players", func(t *testing.T) {
@@ -47,13 +47,14 @@ func TestFileSystemStore(t *testing.T) {
             {"Name": "Cleo", "Wins": 10},
             {"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
-		store := NewFileSystemPlayerStore(database)
+		store, err := NewFileSystemPlayerStore(database)
+		AssertNoError(t, err)
 
 		store.RecordWin("Chris")
 		got := store.getPlayerScore("Chris")
 
 		want := 34
-		lib.AssertEqualIntegers(t, got, want)
+		AssertEqualIntegers(t, got, want)
 	})
 
 	t.Run("store wins for new players", func(t *testing.T) {
@@ -61,21 +62,28 @@ func TestFileSystemStore(t *testing.T) {
             {"Name": "Cleo", "Wins": 10},
             {"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
-		store := NewFileSystemPlayerStore(database)
+		store, err := NewFileSystemPlayerStore(database)
+		AssertNoError(t, err)
 
 		store.RecordWin("Jack")
 		got := store.getPlayerScore("Jack")
 		want := 1
-		lib.AssertEqualIntegers(t, got, want)
+		AssertEqualIntegers(t, got, want)
+	})
+
+	t.Run("works with empty file", func(t *testing.T) {
+		database, cleanDatabase := createTempFile(t, "")
+		defer cleanDatabase()
+		_, err := NewFileSystemPlayerStore(database)
+		AssertNoError(t, err)
 	})
 }
 
-func createTempFile(t *testing.T, seedData string) (io.ReadWriteSeeker, func()) {
+func createTempFile(t *testing.T, seedData string) (*os.File, func()) {
 	t.Helper()
 	tmpFile, err := ioutil.TempFile("", "db")
-	if err != nil {
-		t.Fatalf("could not create a temp file %v", err)
-	}
+	AssertFileCreation(t, err)
+
 	tmpFile.Write([]byte(seedData))
 	removeFile := func() {
 		tmpFile.Close()
