@@ -34,8 +34,8 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 		AssertStatus(t, response, http.StatusOK)
 		AssertContentType(t, response)
 		wantedLeague := []Player{
-			{"Cleo", 10},
 			{"Chris", 33},
+			{"Cleo", 10},
 			{"Tony", 3},
 		}
 		AssertLeague(t, response, wantedLeague)

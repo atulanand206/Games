@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"os"
 	"fmt"
+	"sort"
 )
 
 type FileSystemPlayerStore struct {
@@ -55,5 +56,8 @@ func (i *FileSystemPlayerStore) RecordWin(player string) {
 }
 
 func (i *FileSystemPlayerStore) GetLeague() League {
+	sort.SliceStable(i.league, func(k, j int) bool {
+		return i.league[k].Wins > i.league[j].Wins
+	})
 	return i.league
 }
