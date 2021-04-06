@@ -1,10 +1,7 @@
 package com.games.LeetCode.Problems.BuySellStock;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 
-import static java.lang.Math.min;
+import java.util.Arrays;
 
 public class Solution {
 
@@ -40,41 +37,45 @@ public class Solution {
     }
 
     public static int worthyMatrices(long[][] a, int k) {
-        long[][] prefixSum2D = prefixSum2D(a);
-        int R = a.length;
-        int C = a[0].length;
-        long[][] dp = avgs(prefixSum2D, k);
+        return avgs(prefixSum2D(a), k);
+    }
+
+    public static int avgs(long[][] prefixSum2D, int k) {
+        int r = prefixSum2D.length;
+        int c = prefixSum2D[0].length;
         int count = 0;
-        for (int i = 1; i < R; i++)
-            for (int j = 1; j < C; j++)
-                count += dp[i][j];
+        int maxOrder = Math.min(r, c);
+        for (int order = 2; order <= maxOrder; order++) {
+            long[] dd = new long[r];
+            Arrays.fill(dd, -1L);
+            for (int i = 1; i < r; i++) {
+                int start = order - 1, end = c - 1;
+                while (start < c && end >= 0 && start <= end) {
+                    int j = (start + end) / 2;
+                    long value = value(prefixSum2D, i - order + 1, i, j - order + 1, j);
+                    if (value >= k) {
+                        dd[i] = j;
+                        end = j - 1;
+                    } else {
+                        start = j + 1;
+                    }
+                }
+            }
+            System.out.println(order);
+            for (int i = 0; i < dd.length; i++) {
+                long d = dd[i];
+                if (d != -1L)
+                    count += (c - d);
+                System.out.printf("%d -> %d\n", i, d);
+            }
+            System.out.println();
+        }
         return count;
     }
 
-    public static long[][] avgs(long[][] prefixSum2D, int k) {
-        int r = prefixSum2D.length;
-        int c = prefixSum2D[0].length;
-        long[][] dp = new long[r][c];
-        for (int i = 1; i < r; i++) {
-            for (int j = 1; j < c; j++) {
-                System.out.printf("%d, %d\n", i, j);
-                int p = min(i, j);
-                long val = 0L;
-                for (int z = 1; z <= p; z++) {
-                    long value = value(prefixSum2D, i - z, i, j - z, j);
-                    if (value >= k) {
-                        // i, j, z
-                        System.out.printf("%d X %d\n\n", i, j);
-                        val++;
-                    }
-                }
-                dp[i][j] = val;
-            }
-        }
-        return dp;
-    }
-
     private static long value(long[][] prefixSum, int x1, int x2, int y1, int y2) {
+        if (x1 < 0 || y1 < 0)
+            return 0L;
         long res = prefixSum[x2][y2];
         if (y1 > 0)
             res -= prefixSum[x2][y1 - 1];

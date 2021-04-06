@@ -42,7 +42,7 @@ public class SolutionTest {
     void testWorthyMatrix() {
         int[][] ints = ListUtils.array2DOf("[[2,2,3],[3,4,5],[4,5,5]]");
 //        int[][] ints = ListUtils.array2DOf("[[1,1,1,1,7],[2,2,2,2,2],[3,3,6,7,9],[2,3,4,4,5],[1,1,3,5,5]]");
-        int k = 9;
+        int k = 4;
         t(ints, k);
     }
 
@@ -59,7 +59,7 @@ public class SolutionTest {
         long[][] a = ListUtils.long2DOf(ints);
 //        ListUtils.print2D(a);
 //        ListUtils.print2D(Solution.prefixSum2D(a));
-//        ListUtils.print2D(Solution.avgs(Solution.prefixSum2D(a), k));
+//        System.out.println(Solution.avgs(Solution.prefixSum2D(a), k));
         int x = Solution.worthyMatrices(a, k);
         System.out.println();
         System.out.println(x);
