@@ -50,8 +50,20 @@ public class ListUtils {
         System.out.println();
     }
 
+    public static void print(long[] list) {
+        for (long in : list)
+            System.out.print(in + ", ");
+        System.out.println();
+    }
+
     public static void print2D(int[][] list) {
         for (int[] in : list)
+            print(in);
+        System.out.println();
+    }
+
+    public static void print2D(long[][] list) {
+        for (long[] in : list)
             print(in);
         System.out.println();
     }
@@ -188,6 +200,18 @@ public class ListUtils {
             lists.add(list);
         }
         return lists;
+    }
+
+    public static long[][] long2DOf(int[][] arrays) {
+        long[][] array = new long[arrays.length][];
+        int i = 0;
+        for (int[] nestedList : arrays) {
+            long[] tsi = new long[nestedList.length];
+            for (int j = 0; j < tsi.length; j++)
+                tsi[j] = nestedList[j];
+            array[i++] = tsi;
+        }
+        return array;
     }
 
 }
