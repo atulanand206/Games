@@ -56,6 +56,12 @@ public class ListUtils {
         System.out.println();
     }
 
+    public static void print(char[] list) {
+        for (char in : list)
+            System.out.print(in + ", ");
+        System.out.println();
+    }
+
     public static void print2D(int[][] list) {
         for (int[] in : list)
             print(in);
