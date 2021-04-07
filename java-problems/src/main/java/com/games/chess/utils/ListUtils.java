@@ -38,6 +38,12 @@ public class ListUtils {
         System.out.println();
     }
 
+    public static <T> void print(Set<T> list) {
+        for (T in : list)
+            System.out.print(in + ", ");
+        System.out.println();
+    }
+
     public static <T> void print2D(List<List<T>> list) {
         for (List<T> in : list)
             print(in);
