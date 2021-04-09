@@ -50,6 +50,12 @@ public class ListUtils {
         System.out.println();
     }
 
+    public static void print(boolean[] list) {
+        for (boolean in : list)
+            System.out.print(in + ", ");
+        System.out.println();
+    }
+
     public static void print(int[] list) {
         for (int in : list)
             System.out.print(in + ", ");
