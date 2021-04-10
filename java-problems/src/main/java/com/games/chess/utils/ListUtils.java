@@ -80,6 +80,12 @@ public class ListUtils {
         System.out.println();
     }
 
+    public static void print2D(String[][] list) {
+        for (String[] in : list)
+            print(in);
+        System.out.println();
+    }
+
     public static void print2D(long[][] list) {
         for (long[] in : list)
             print(in);
@@ -89,6 +95,12 @@ public class ListUtils {
     public static void print(String[] list) {
         for (String in : list)
             System.out.print(in + ", \n");
+        System.out.println();
+    }
+
+    public static void printS(String[] list) {
+        for (String in : list)
+            System.out.print(in + ", ");
         System.out.println();
     }
 
