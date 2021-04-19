@@ -68,9 +68,21 @@ public class ListUtils {
         System.out.println();
     }
 
+    public static void print(double[] list) {
+        for (double in : list)
+            System.out.printf("%.9f, ", in);
+        System.out.println();
+    }
+
     public static void print(char[] list) {
         for (char in : list)
             System.out.print(in + ", ");
+        System.out.println();
+    }
+
+    public static void print3D(int[][][] list) {
+        for (int[][] in : list)
+            print2D(in);
         System.out.println();
     }
 
@@ -88,6 +100,12 @@ public class ListUtils {
 
     public static void print2D(long[][] list) {
         for (long[] in : list)
+            print(in);
+        System.out.println();
+    }
+
+    public static void print2D(double[][] list) {
+        for (double[] in : list)
             print(in);
         System.out.println();
     }
