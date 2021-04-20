@@ -10,10 +10,7 @@ public class Solution {
     public static void main(String[] args) {
         Scanner sc = new Scanner(new InputStreamReader(System.in));
         int t = sc.nextInt();
-        int[] largestPrimes = largestPrimes(max);
-        List<Map<Integer, Integer>> primeFactors = primeFactors(largestPrimes, max);
-        int[] ints = distinctPrimeCount(primeFactors);
-        int[][] pref = prefix(ints, 5);
+        int[][] pref = prefix(distinctPrimeCount(primeFactors(largestPrimes(max), max)), 5);
         while (t-- > 0) {
             int a = sc.nextInt(), b = sc.nextInt(), k = sc.nextInt();
             System.out.println(pref[k][b] - pref[k][a - 1]);
