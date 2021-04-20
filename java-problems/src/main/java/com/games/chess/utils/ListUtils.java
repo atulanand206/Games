@@ -32,6 +32,14 @@ public class ListUtils {
         return result;
     }
 
+    public static <T> void printi(List<T> list) {
+        for (int i = 0; i < list.size(); i++) {
+            System.out.print(i + ": ");
+            System.out.print(list.get(i) + ", ");
+            System.out.println();
+        }
+    }
+
     public static <T> void print(List<T> list) {
         for (T in : list)
             System.out.print(in + ", ");
@@ -41,6 +49,14 @@ public class ListUtils {
     public static <T> void print(Set<T> list) {
         for (T in : list)
             System.out.print(in + ", ");
+        System.out.println();
+    }
+
+    public static <T> void print2Di(List<List<T>> list) {
+        for (int i = 0; i < list.size(); i++) {
+            System.out.print(i + ": ");
+            print(list.get(i));
+        }
         System.out.println();
     }
 
