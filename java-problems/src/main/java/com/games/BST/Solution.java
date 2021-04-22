@@ -2,8 +2,18 @@ package com.games.BST;
 
 import com.games.chess.utils.ListUtils;
 
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Solution {
 
@@ -281,7 +291,67 @@ public class Solution {
 
     }
 
+    static class Pods {
+
+        static int[][] dirs = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+        static class Node {
+            int x, y, k, length;
+
+            public Node(int x, int y, int k, int length) {
+                this.x = x;
+                this.y = y;
+                this.k = k;
+                this.length = length;
+            }
+
+            static Node of(int x, int y, int k, int length) {
+                return new Node(x, y, k, length);
+            }
+        }
+
+        public static int solution(int[][] map) {
+            int n = map.length;
+            int c = map[0].length;
+            int[][][] dp = new int[n][c][2];
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < c; j++)
+                    for (int k = 0; k < 2; k++)
+                        dp[i][j][k] = Integer.MAX_VALUE;
+            Queue<Node> q = new LinkedList<>();
+            q.add(Node.of(0, 0, 1, 1));
+            while (!q.isEmpty()) {
+                Node node = q.poll();
+                if (node.x == n - 1 && node.y == c - 1) return node.length;
+                int len = node.length + 1;
+                int k = node.k;
+                for (int[] dir : dirs) {
+                    int x = node.x + dir[0];
+                    int y = node.y + dir[1];
+                    if (x == n - 1 && y == c - 1) return len;
+                    if (x >= 0 && x < n && y >= 0 && y < c)
+                        if (map[x][y] == 0) {
+                            if (len < dp[x][y][k]) {
+                                q.add(Node.of(x, y, k, len));
+                                dp[x][y][k] = len;
+                            }
+                        } else {
+                            if (k > 0 && len < dp[x][y][k]) {
+                                q.add(Node.of(x, y, k - 1, len));
+                                dp[x][y][k] = len;
+                            }
+                        }
+                }
+            }
+            return -1;
+        }
+    }
+
     public static void main(String[] args) {
+        System.out.println(Pods.solution(new int[][]{{0,0,0},{1,1,0},{0,0,0},{0,1,1},{0,0,0}}));
+        System.out.println(Pods.solution(new int[][]{{0, 1, 1, 0}, {0, 0, 0, 1}, {1, 1, 0, 0}, {1, 1, 1, 0}}));
+        System.out.println(Pods.solution(new int[][]{{0, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 0}, {0, 0, 0, 0, 0, 0}, {0, 1, 1, 1, 1, 1}, {0, 1,
+                1, 1, 1, 1}, {0, 0, 0, 0, 0, 0}}));
 //        System.out.println(Triplets.isMatch(new int[]{1, 1, 1, 1, 2, 2, 2, 3, 3, 3}));
 //        System.out.println(Triplets.isMatch(new int[]{1, 2, 3, 4, 5, 6}));
 //        System.out.println(Triplets.isMatch(new int[]{1, 1, 1}));
@@ -289,12 +359,12 @@ public class Solution {
 //        System.out.println(Triplets.isMatch(new int[]{1, 2, 4, 8}));
 //        System.out.println(Triplets.isMatch(new int[]{4, 5, 2, 8, 5, 9, 2, 2, 7, 1}));
 //        System.out.println(Triplets.isMatch(new int[]{720, 220, 620, 770, 740, 620, 160, 970, 190, 550, 730, 340, 90, 170, 660, 940, 990, 250, 320, 930, 400, 50, 210, 640, 390, 830, 440, 760, 760, 550, 140, 150, 890, 610, 620, 340, 710, 590, 410, 480, 770, 830, 520, 400, 70, 770, 410, 240, 660, 210, 200, 280, 320, 760, 340, 360, 60, 660, 950, 30, 260, 230, 210, 420, 570, 20, 580, 480, 350, 360, 270, 180, 230, 690, 370, 80, 780, 510, 530, 800, 90, 640, 260, 230, 860, 690, 860, 420, 560, 690, 100, 420, 980, 700, 600, 680, 530, 10, 240, 930}));
-        System.out.println(Triplets.isMatch(randomNumbers(100, 1000)));
-        System.out.println(Triplets.isMatch(randomNumbers(2000, 999999)));
-        System.out.println(Triplets.isMatch(randomNumbers(2000, 999999)));
-        System.out.println(Triplets.isMatch(randomNumbers(2000, 999999)));
-        System.out.println(Triplets.isMatch(randomNumbers(2000, 999999)));
-        System.out.println(Triplets.isMatch(randomNumbers(100, 1000)));
+//        System.out.println(Triplets.isMatch(randomNumbers(100, 1000)));
+//        System.out.println(Triplets.isMatch(randomNumbers(2000, 999999)));
+//        System.out.println(Triplets.isMatch(randomNumbers(2000, 999999)));
+//        System.out.println(Triplets.isMatch(randomNumbers(2000, 999999)));
+//        System.out.println(Triplets.isMatch(randomNumbers(2000, 999999)));
+//        System.out.println(Triplets.isMatch(randomNumbers(100, 1000)));
     }
 
     private static int[] randomNumbers(int count, int limit) {
