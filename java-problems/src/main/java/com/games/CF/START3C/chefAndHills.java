@@ -28,11 +28,11 @@ public class chefAndHills {
         }
     }
 
-    public static int inputInt(BufferedReader br) throws IOException {
+    private static int inputInt(BufferedReader br) throws IOException {
         return Integer.parseInt(br.readLine());
     }
 
-    public static int[] inputIntArray(BufferedReader br) throws IOException {
+    private static int[] inputIntArray(BufferedReader br) throws IOException {
         String[] spec = br.readLine().split(" ");
         int[] arr = new int[spec.length];
         for (int i = 0; i < spec.length; i++) arr[i] = Integer.parseInt(spec[i]);
