@@ -120,6 +120,16 @@ public class ListUtils {
         System.out.println();
     }
 
+    public static void print2D(long[][] list, int x, int y) {
+        for (int i = 0; i < x; i++) {
+            for (int j = 0; j < y; j++) {
+                System.out.printf("%d ", list[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
     public static void print2D(double[][] list) {
         for (double[] in : list)
             print(in);
@@ -146,6 +156,18 @@ public class ListUtils {
             System.out.println();
         }
         System.out.println();
+    }
+
+    public static void printDpi(int[][] dp, int[] list) {
+        int digitsInMax = digitsInPair(max(dp), min(dp));
+        System.out.printf("%s ", formatted(digitsInMax, "-"));
+        printFormatted(digitsInMax, list);
+        for (int i = 0; i < dp.length; i++) {
+            System.out.printf("%s ", formatted(digitsInMax, list[i]));
+            for (int item : dp[i])
+                System.out.printf("%s ", formatted(digitsInMax, item));
+            System.out.println();
+        }
     }
 
     public static void printDp(int[][] dp, int[] list) {
