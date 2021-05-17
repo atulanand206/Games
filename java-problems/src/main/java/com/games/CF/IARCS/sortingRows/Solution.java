@@ -19,6 +19,15 @@ public class Solution {
             nums.add(ls);
         }
 
+        nums.sort((l1, l2) -> {
+            int index = 0;
+            while (index < l1.size() && index < l2.size()) {
+                if (!l1.get(index).equals(l2.get(index))) return l1.get(index).compareTo(l2.get(index));
+                if (l1.size() == index + 1) return -1;
+                index++;
+            }
+            return -1;
+        });
         for (List<Integer> list : nums) {
             for (int in : list)
                 System.out.printf("%d ", in);
