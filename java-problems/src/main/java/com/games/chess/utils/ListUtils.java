@@ -170,6 +170,19 @@ public class ListUtils {
         }
     }
 
+    public static void printDp(int[][] dp,List<Integer> list) {
+        int digitsInMax = digitsInPair(max(dp), min(dp));
+        System.out.printf("%s ", formatted(digitsInMax - 1, "-"));
+        System.out.printf("%s ", formatted(digitsInMax, "-"));
+        printFormatted(digitsInMax, list);
+        for (int i = 0; i < dp.length; i++) {
+            System.out.printf("%s ", i > 0 ? formatted(digitsInMax, list.get(i)) : formatted(digitsInMax, "-"));
+            for (int item : dp[i])
+                System.out.printf("%s ", formatted(digitsInMax, item));
+            System.out.println();
+        }
+    }
+
     public static void printDp(int[][] dp, int[] list) {
         int digitsInMax = digitsInPair(max(dp), min(dp));
         System.out.printf("%s ", formatted(digitsInMax, "-"));
@@ -182,6 +195,13 @@ public class ListUtils {
             System.out.println();
         }
     }
+
+    public static void printFormatted(int digitsInMax, List<Integer> list) {
+        for (int in : list)
+            System.out.printf("%s ", formatted(digitsInMax, in));
+        System.out.println();
+    }
+
 
     public static void printFormatted(int digitsInMax, int[] list) {
         for (int in : list)

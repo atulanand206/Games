@@ -7,6 +7,18 @@ import java.util.Map;
 
 public class MathUtils {
 
+    private static final int MOD = (int) (1E9 + 7);
+
+    public static long binExp(long a, long m) {
+        long ans = 1;
+        while (m > 0) {
+            if ((m & 1) > 0) ans = (ans * a) % MOD;
+            a = (a * a) % MOD;
+            m >>= 1;
+        }
+        return ans;
+    }
+
     // O(N log(logN))
     public static List<Integer> primes(int n) {
         List<Integer> primes = new ArrayList<>();
