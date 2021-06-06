@@ -1,9 +1,7 @@
 package com.games.Templates.X;
 
-import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -11,11 +9,15 @@ import java.util.Map;
 public class Solution {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
+        BufferedReader br = new BufferedReader(I.fileInputStream());
+        int x = I.inputInt(br);
+        O.attach();
+        O.debug(x);
+        O.debugNewLine();
+        O.debug(S.string(I.inputIntArray(br)));
     }
 
-    public static class Stringify {
+    public static class S {
 
         public static <T> String string(T val) {
             return val + "\n";
@@ -179,7 +181,7 @@ public class Solution {
         }
     }
 
-    public static class Input {
+    public static class I {
 
         public static int inputInt(BufferedReader br) throws IOException {
             return Integer.parseInt(br.readLine());
@@ -206,19 +208,43 @@ public class Solution {
         public static String inputString(BufferedReader br) throws IOException {
             return br.readLine();
         }
+
+        private static InputStreamReader stdInputStream() {
+            return new InputStreamReader(System.in);
+        }
+
+        public static InputStreamReader fileInputStream() throws FileNotFoundException {
+            return new InputStreamReader(new FileInputStream("input.txt"), StandardCharsets.UTF_8);
+        }
     }
 
-    public static class Output {
+    public static class O {
 
-        public static void beginWrite(String text) {
-            write(text, false);
+        public static void attach() {
+            debug("", false);
         }
 
-        public static void write(String text) {
-            write(text, true);
+        public static void debugNewLine() {
+            debug("\n");
         }
 
-        public static void write(String text, boolean append) {
+        public static void debug(int val) {
+            debug(String.valueOf(val));
+        }
+
+        public static void debug(long val) {
+            debug(String.valueOf(val));
+        }
+
+        public static void debug(boolean val) {
+            debug(val ? "T" : "F");
+        }
+
+        public static void debug(String text) {
+            debug(text, true);
+        }
+
+        public static void debug(String text, boolean append) {
             try {
                 FileWriter fileWriter = new FileWriter("debug.txt", append);
                 fileWriter.write(text);
