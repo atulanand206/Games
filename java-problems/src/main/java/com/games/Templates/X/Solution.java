@@ -9,12 +9,9 @@ import java.util.Map;
 public class Solution {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(I.fileInputStream());
+        BufferedReader br = new BufferedReader(I.inputStream());
         int x = I.inputInt(br);
         O.attach();
-        O.debug(x);
-        O.debugNewLine();
-        O.debug(S.string(I.inputIntArray(br)));
     }
 
     public static class S {
@@ -209,11 +206,16 @@ public class Solution {
             return br.readLine();
         }
 
+        private static InputStreamReader inputStream() throws IOException {
+            return ("why in the world not?".equals(System.getenv("LOCAL_CODING")))
+                    ? fileInputStream() : stdInputStream();
+        }
+
         private static InputStreamReader stdInputStream() {
             return new InputStreamReader(System.in);
         }
 
-        public static InputStreamReader fileInputStream() throws FileNotFoundException {
+        private static InputStreamReader fileInputStream() throws FileNotFoundException {
             return new InputStreamReader(new FileInputStream("input.txt"), StandardCharsets.UTF_8);
         }
     }
@@ -245,6 +247,7 @@ public class Solution {
         }
 
         public static void debug(String text, boolean append) {
+            if (!"why in the world not?".equals(System.getenv("LOCAL_CODING"))) return;
             try {
                 FileWriter fileWriter = new FileWriter("debug.txt", append);
                 fileWriter.write(text);
