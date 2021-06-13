@@ -3,106 +3,74 @@ package com.games.CodeChef.Jun21B.minimumDualArea;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Solution {
 
+    private static class Pair {
+        int x;
+        int y;
+
+        public Pair(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        static Pair of(int x, int y) {
+            return new Pair(x, y);
+        }
+    }
+
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(I.inputStream());
+        BufferedReader br = new BufferedReader(I.fileInputStream());
         int t = I.inputInt(br);
         O.attach();
         StringBuilder sb = new StringBuilder();
         while (t-- > 0) {
             int n = I.inputInt(br);
-            List<List<Integer>> pts = new ArrayList<>();
+            List<Pair> x = new ArrayList<>(), y = new ArrayList<>();
+            List<Integer> X = new ArrayList<>(), Y = new ArrayList<>();
             for (int i = 0; i < n; i++) {
                 int[] ints = I.inputIntArray(br);
-                List<Integer> list = new ArrayList<>();
-                list.add(ints[0]);
-                list.add(ints[1]);
-                pts.add(list);
+                x.add(Pair.of(ints[0], ints[1]));
+                y.add(Pair.of(ints[1], ints[0]));
+                X.add(ints[0]);
+                Y.add(ints[1]);
             }
-            pts.sort((o1, o2) -> {
-                if (o1.get(0).equals(o2.get(0))) return o1.get(1).compareTo(o2.get(1));
-                return o1.get(0).compareTo(o2.get(0));
-            });
-            for (int i = 1; i < pts.size(); i++) {
-                if (pts.get(i).get(0).equals(pts.get(i - 1).get(0)) && pts.get(i).get(1).equals(pts.get(i - 1).get(1)))
-                    pts.remove(i--);
+            x.sort((o1, o2) -> o1.x == o2.x ? Integer.compare(o1.y, o2.y) : Integer.compare(o1.x, o2.x));
+            y.sort((o1, o2) -> o1.x == o2.x ? Integer.compare(o1.y, o2.y) : Integer.compare(o1.x, o2.x));
+            X.sort(Integer::compare);
+            Y.sort(Integer::compare);
+            long h1 = 0, h2 = 0, h1Max = 0, h1Min = Long.MAX_VALUE, area = Long.MAX_VALUE;
+            for (int i = 0; i < n - 1; i++) {
+                h1Max = Math.max(h1Max, x.get(i).y);
+                h1Min = Math.min(h1Min, x.get(i).y);
+                h1 = h1Max - h1Min;
+                Y.remove(0);
+                if (!Y.isEmpty())
+                    h2 = Y.get(Y.size() - 1) - Y.get(0);
+                long newArea = (x.get(i).x - x.get(0).x) * h1 +
+                        (x.get(n - 1).x - x.get(i + 1).x) * h2;
+                area = Math.min(area, newArea);
+                O.debug(area);
             }
-            sb.append(minArea(pts)).append("\n");
+            long w1 = 0, w2 = 0, w1Max = 0, w1Min = Long.MAX_VALUE;
+            for (int i = 0; i < n - 1; i++) {
+                w1Max = Math.max(w1Max, y.get(i).y);
+                w1Min = Math.min(w1Min, y.get(i).y);
+                w1 = w1Max - w1Min;
+                X.remove(0);
+                if (!X.isEmpty())
+                    w2 = X.get(X.size() - 1) - X.get(0);
+                long newArea = (y.get(i).x - y.get(0).x) * w1 +
+                        (y.get(n - 1).x - y.get(i + 1).x) * w2;
+                area = Math.min(area, newArea);
+                O.debug(area);
+            }
+            O.debug("area" + area);
+            sb.append(area == Long.MAX_VALUE ? 0 : area).append("\n");
         }
         O.print(sb);
-    }
-
-    private static long minArea(List<List<Integer>> pts) {
-        long minArea = Long.MAX_VALUE;
-
-        pts.sort((o1, o2) -> {
-            if (o1.get(0).equals(o2.get(0))) return o1.get(1).compareTo(o2.get(1));
-            return o1.get(0).compareTo(o2.get(0));
-        });
-        minArea = minArea(pts, minArea);
-
-        pts.sort((o1, o2) -> {
-            if (o1.get(0).equals(o2.get(0))) return o2.get(1).compareTo(o1.get(1));
-            return o1.get(0).compareTo(o2.get(0));
-        });
-        minArea = minArea(pts, minArea);
-
-        pts.sort((o1, o2) -> {
-            if (o1.get(1).equals(o2.get(1))) return o1.get(0).compareTo(o2.get(0));
-            return o1.get(1).compareTo(o2.get(1));
-        });
-        minArea = minArea(pts, minArea);
-
-        pts.sort((o1, o2) -> {
-            if (o1.get(1).equals(o2.get(1))) return o2.get(0).compareTo(o1.get(0));
-            return o1.get(1).compareTo(o2.get(1));
-        });
-        minArea = minArea(pts, minArea);
-        return minArea;
-    }
-
-    private static long minArea(List<List<Integer>> pts, long minArea) {
-        Rectangle first = new Rectangle();
-        for (List<Integer> pt : pts) {
-            first.addPoint(pt.get(0), pt.get(1));
-        }
-        Rectangle second = new Rectangle();
-        for (List<Integer> pt : pts) {
-            first.removePoint(pt.get(0), pt.get(1));
-            second.addPoint(pt.get(0), pt.get(1));
-            minArea = Math.min(minArea, first.area() + second.area());
-        }
-        return minArea;
-    }
-
-    private static class Rectangle {
-        private final PriorityQueue<Integer> minX = new PriorityQueue<>();
-        private final PriorityQueue<Integer> maxX = new PriorityQueue<>(Comparator.reverseOrder());
-        private final PriorityQueue<Integer> minY = new PriorityQueue<>();
-        private final PriorityQueue<Integer> maxY = new PriorityQueue<>(Comparator.reverseOrder());
-
-        void addPoint(int x, int y) {
-            minX.add(x);
-            maxX.add(x);
-            minY.add(y);
-            maxY.add(y);
-        }
-
-        void removePoint(int x, int y) {
-            minX.remove(x);
-            maxX.remove(x);
-            minY.remove(y);
-            maxY.remove(y);
-        }
-
-        long area() {
-            long x = 0, y = 0;
-            if (!minX.isEmpty() && !maxX.isEmpty()) x = maxX.peek() - minX.peek();
-            if (!minY.isEmpty() && !maxY.isEmpty()) y = maxY.peek() - minY.peek();
-            return x * y;
-        }
     }
 
     public static class I {
