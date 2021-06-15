@@ -1,22 +1,60 @@
-package com.games.Templates.X;
+package com.games.CodeForces.shuffleHashing;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Solution {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(I.inputStream());
-        O.attach();
+        BufferedReader br = new BufferedReader(I.stdInputStream());
         int t = I.inputInt(br);
         StringBuilder sb = new StringBuilder();
         while (t-- > 0) {
-
+            char[] a = I.inputString(br).toCharArray();
+            char[] b = I.inputString(br).toCharArray();
+            if (a.length > b.length) {
+                sb.append("NO").append("\n");
+                continue;
+            }
+            Map<Character, Integer> map = new HashMap<>();
+            Map<Character, Integer> aMap = new HashMap<>();
+            for (char ch : a) aMap.merge(ch, 1, Integer::sum);
+            int l = a.length;
+            for (int i = 0; i < l; i++) map.merge(b[i], 1, Integer::sum);
+            if (same(map, aMap)) {
+                sb.append("YES").append("\n");
+                continue;
+            }
+            boolean flag = false;
+            for (int i = 0; i < b.length - l; i++) {
+                map.merge(b[i], -1, Integer::sum);
+                map.merge(b[i + l], 1, Integer::sum);
+                if (map.get(b[i]) == 0) map.remove(b[i]);
+                if (same(map, aMap)) {
+                    sb.append("YES").append("\n");
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                sb.append("NO").append("\n");
+            }
         }
         O.print(sb);
+    }
+
+    private static boolean same(Map<Character, Integer> m1, Map<Character, Integer> m2) {
+        if (m1.size() != m2.size()) return false;
+        for (Map.Entry<Character, Integer> e : m1.entrySet()) {
+            if (m2.containsKey(e.getKey())) {
+                if (!m2.get(e.getKey()).equals(e.getValue())) return false;
+            } else return false;
+        }
+        return true;
     }
 
     public static class S {

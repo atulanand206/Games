@@ -1,22 +1,27 @@
-package com.games.Templates.X;
+package com.games.CodeForces.lecture;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Solution {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(I.inputStream());
-        O.attach();
-        int t = I.inputInt(br);
+        BufferedReader br = new BufferedReader(I.stdInputStream());
         StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
+        int[] spec = I.inputIntArray(br);
+        int dictWordCount = spec[1];
+        Map<String, String> map = new HashMap<>();
+        while (dictWordCount-- > 0) {
+            String[] mapping = I.inputStringArray(br);
+            map.put(mapping[0], mapping[0].length() <= mapping[1].length() ? mapping[0] : mapping[1]);
         }
-        O.print(sb);
+        String[] lectureNotes = I.inputStringArray(br);
+        for (String lecNote : lectureNotes) sb.append(map.get(lecNote)).append(" ");
+        O.print(sb) ;
     }
 
     public static class S {

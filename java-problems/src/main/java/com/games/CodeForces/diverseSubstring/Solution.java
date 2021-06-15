@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.CodeForces.diverseSubstring;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -9,14 +9,20 @@ import java.util.Map;
 public class Solution {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(I.inputStream());
-        O.attach();
-        int t = I.inputInt(br);
-        StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
+        BufferedReader br = new BufferedReader(I.stdInputStream());
+        int n = I.inputInt(br);
+        char[] arr = I.inputString(br).toCharArray();
+        if (arr.length == 1) {
+            O.print("NO");
+            return;
         }
-        O.print(sb);
+        for (int i = 0; i < arr.length - 1; i++) {
+            if (arr[i] != arr[i + 1]) {
+                O.print(String.format("YES\n%s%s", arr[i], arr[i + 1]));
+                return;
+            }
+        }
+        O.print("NO");
     }
 
     public static class S {

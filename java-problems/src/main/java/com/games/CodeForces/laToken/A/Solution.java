@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.CodeForces.laToken.A;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -8,15 +8,73 @@ import java.util.Map;
 
 public class Solution {
 
+    static char[][] grid;
+    static boolean[][] visited;
+
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(I.inputStream());
-        O.attach();
+        BufferedReader br = new BufferedReader(I.stdInputStream());
         int t = I.inputInt(br);
         StringBuilder sb = new StringBuilder();
         while (t-- > 0) {
-
+            int[] spec = I.inputIntArray(br);
+            int rows = spec[0], cols = spec[1];
+            grid = new char[rows][];
+            for (int i = 0; i < rows; i++)
+                grid[i] = I.inputCharArray(br);
+            visited = new boolean[rows][cols];
+            sb.append(solve());
         }
-        O.print(sb);
+        O.print(sb.toString());
+    }
+
+    private static final int[][] directions = new int[][]{{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    private static String solve() {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (!visited[i][j] && grid[i][j] != '.') {
+                    boolean x = dfs(i, j, grid[i][j]);
+                    if (!x) return "NO\n";
+                }
+            }
+        }
+        return "YES\n" + string(grid);
+    }
+
+    private static char swap(char ch) {
+        return ch == 'R' ? 'W' : 'R';
+    }
+
+    private static boolean isValid(int i, int j) {
+        return i >= 0 && j >= 0 && i < grid.length && j < grid[i].length;
+    }
+
+    private static boolean dfs(int i, int j, char ch) {
+        if (!visited[i][j]) {
+            visited[i][j] = true;
+            if (grid[i][j] != '.')  {
+                for (int[] direction : directions) {
+                    int in = i + direction[0];
+                    int jn = j + direction[1];
+                    if (isValid(in, jn) && grid[in][jn] == ch) return false;
+                    if (isValid(in, jn) && grid[in][jn] == '.') {
+                        grid[in][jn] = swap(ch);
+                        boolean x = dfs(in, jn, swap(ch));
+                        if (!x) return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    public static String string(char[][] array) {
+        StringBuilder sb = new StringBuilder();
+        for (char[] in : array) {
+            for (char i : in) sb.append(i);
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
     public static class S {
@@ -196,6 +254,10 @@ public class Solution {
             return arr;
         }
 
+        public static char[] inputCharArray(BufferedReader br) throws IOException {
+            return br.readLine().toCharArray();
+        }
+
         public static long inputLong(BufferedReader br) throws IOException {
             return Long.parseLong(br.readLine());
         }
@@ -209,10 +271,6 @@ public class Solution {
 
         public static String inputString(BufferedReader br) throws IOException {
             return br.readLine();
-        }
-
-        public static String[] inputStringArray(BufferedReader br) throws IOException {
-            return br.readLine().split(" ");
         }
 
         private static InputStreamReader inputStream() throws IOException {
@@ -256,14 +314,14 @@ public class Solution {
         }
 
         public static void debug(String text, boolean append) {
-            if (!"why in the world not?".equals(System.getenv("LOCAL_CODING"))) return;
-            try {
-                FileWriter fileWriter = new FileWriter("debug.txt", append);
-                fileWriter.write(text);
-                fileWriter.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+//            if (!"why in the world not?".equals(System.getenv("LOCAL_CODING"))) return;
+//            try {
+//                FileWriter fileWriter = new FileWriter("debug.txt", append);
+//                fileWriter.write(text);
+//                fileWriter.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
         }
 
         public static <T> void print(T object) {

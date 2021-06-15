@@ -1,22 +1,28 @@
-package com.games.Templates.X;
+package com.games.CodeForces.kString;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Solution {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(I.inputStream());
-        O.attach();
-        int t = I.inputInt(br);
+        BufferedReader br = new BufferedReader(I.stdInputStream());
+        int k = I.inputInt(br);
+        char[] s = I.inputString(br).toCharArray();
+        Map<Character, Integer> map = new HashMap<>();
+        for(char i : s) map.merge(i, 1, Integer::sum);
         StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
+        for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+            if (entry.getValue() % k != 0) { O.print(-1); return; }
+            entry.setValue(entry.getValue() / k);
+            sb.append(new String(new char[entry.getValue()])
+                    .replace("\0", String.valueOf(entry.getKey())));
         }
-        O.print(sb);
+        O.print(new String(new char[k]).replace("\0", sb));
     }
 
     public static class S {

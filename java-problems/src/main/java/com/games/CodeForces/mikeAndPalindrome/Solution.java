@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.CodeForces.mikeAndPalindrome;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -9,14 +9,15 @@ import java.util.Map;
 public class Solution {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(I.inputStream());
-        O.attach();
-        int t = I.inputInt(br);
-        StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
+        BufferedReader br = new BufferedReader(I.stdInputStream());
+        char[] arr = I.inputString(br).toCharArray();
+        int diff = 0;
+        for (int i = 0; i < arr.length / 2; i++) {
+            int abs = Math.abs((int) arr[i] - (int) arr[arr.length - i - 1]) == 0 ? 0 : 1;
+            diff+= abs;
         }
-        O.print(sb);
+        if (arr.length % 2 != 0) if (diff == 0) diff++;
+        O.print(diff == 1 ? "YES" : "NO");
     }
 
     public static class S {

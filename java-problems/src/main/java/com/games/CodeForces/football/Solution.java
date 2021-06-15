@@ -1,22 +1,26 @@
-package com.games.Templates.X;
+package com.games.CodeForces.football;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Solution {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(I.inputStream());
-        O.attach();
+        BufferedReader br = new BufferedReader(I.stdInputStream());
         int t = I.inputInt(br);
-        StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
-        }
-        O.print(sb);
+        Map<String, Integer> map = new HashMap<>();
+        while (t-- > 0) map.merge(I.inputString(br), 1, Integer::sum);
+        String ans = ""; int score = 0;
+        for (Map.Entry<String, Integer> entry : map.entrySet())
+            if (entry.getValue() > score) {
+                score = entry.getValue();
+                ans = entry.getKey();
+            }
+        O.print(ans);
     }
 
     public static class S {
@@ -209,10 +213,6 @@ public class Solution {
 
         public static String inputString(BufferedReader br) throws IOException {
             return br.readLine();
-        }
-
-        public static String[] inputStringArray(BufferedReader br) throws IOException {
-            return br.readLine().split(" ");
         }
 
         private static InputStreamReader inputStream() throws IOException {

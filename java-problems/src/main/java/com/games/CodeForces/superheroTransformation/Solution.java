@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.CodeForces.superheroTransformation;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -8,15 +8,28 @@ import java.util.Map;
 
 public class Solution {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(I.inputStream());
-        O.attach();
-        int t = I.inputInt(br);
-        StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
 
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(I.stdInputStream());
+        char[] a = I.inputString(br).toCharArray();
+        char[] b = I.inputString(br).toCharArray();
+        if (a.length != b.length) {
+            O.print("No");
+            return;
         }
-        O.print(sb);
+        for (int i = 0; i < a.length; i++) {
+            char ch1 = a[i], ch2 = b[i];
+            if ((isVowel(ch1) && isVowel(ch2)) || (!isVowel(ch1) && !isVowel(ch2))) {
+                continue;
+            }
+            O.print("No");
+            return;
+        }
+        O.print("Yes");
+    }
+
+    private static boolean isVowel(char ch) {
+        return ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u';
     }
 
     public static class S {

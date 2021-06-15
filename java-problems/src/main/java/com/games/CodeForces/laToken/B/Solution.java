@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.CodeForces.laToken.B;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -14,7 +14,39 @@ public class Solution {
         int t = I.inputInt(br);
         StringBuilder sb = new StringBuilder();
         while (t-- > 0) {
-
+            int n = I.inputInt(br);
+            int[] arr = I.inputIntArray(br);
+            int score = 0;
+            score += arr[0] + arr[arr.length - 1];
+            for (int i = 0; i < n - 1; i++) score += Math.abs(arr[i + 1] - arr[i]);
+            int ops = 0;
+            if (arr.length > 1) {
+                if (arr[0] > arr[1]) {
+                    int k = arr[0] - arr[1];
+                    score -= 2 * k;
+                    arr[0] = arr[1];
+                    ops += k;
+                }
+                O.debug(S.string(arr));
+                if (arr[n - 1] > arr[n - 2]) {
+                    int k = arr[n - 1] - arr[n - 2];
+                    score -= 2 * k;
+                    arr[n - 1] = arr[n - 2];
+                    ops += k;
+                }
+                O.debug(S.string(arr));
+                for (int i = 1; i < n - 1; i++) {
+                    if (arr[i] > arr[i - 1] && arr[i] > arr[i + 1]) {
+                        int k = Math.max(arr[i - 1], arr[i + 1]);
+                        int l = arr[i] - k;
+                        score -= 2 * l;
+                        arr[i] = k;
+                        ops += l;
+                    }
+                    O.debug(S.string(arr));
+                }
+            }
+            sb.append(score + ops + "\n");
         }
         O.print(sb);
     }
@@ -209,10 +241,6 @@ public class Solution {
 
         public static String inputString(BufferedReader br) throws IOException {
             return br.readLine();
-        }
-
-        public static String[] inputStringArray(BufferedReader br) throws IOException {
-            return br.readLine().split(" ");
         }
 
         private static InputStreamReader inputStream() throws IOException {

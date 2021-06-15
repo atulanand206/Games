@@ -1,20 +1,29 @@
-package com.games.Templates.X;
+package com.games.CodeForces.brokenKeyboard;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Solution {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(I.inputStream());
-        O.attach();
+        BufferedReader br = new BufferedReader(I.stdInputStream());
         int t = I.inputInt(br);
         StringBuilder sb = new StringBuilder();
         while (t-- > 0) {
-
+            List<CharSequence> working = new ArrayList<>();
+            char[] s = I.inputString(br).toCharArray();
+            int ch = 1;
+            for (int i = 1; i < s.length; i++) {
+                if (s[i] == s[i - 1]) ch++;
+                else {
+                    if (ch % 2 != 0) working.add(String.valueOf(s[i - 1]));
+                    ch = 1;
+                }
+            }
+            if (ch % 2 != 0) working.add(String.valueOf(s[s.length - 1]));
+            sb.append(working.stream().sorted().distinct().collect(Collectors.joining(""))).append("\n");
         }
         O.print(sb);
     }
@@ -209,10 +218,6 @@ public class Solution {
 
         public static String inputString(BufferedReader br) throws IOException {
             return br.readLine();
-        }
-
-        public static String[] inputStringArray(BufferedReader br) throws IOException {
-            return br.readLine().split(" ");
         }
 
         private static InputStreamReader inputStream() throws IOException {

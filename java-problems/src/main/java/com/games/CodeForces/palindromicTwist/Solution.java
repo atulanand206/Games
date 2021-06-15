@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.CodeForces.palindromicTwist;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -9,12 +9,24 @@ import java.util.Map;
 public class Solution {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(I.inputStream());
-        O.attach();
+        BufferedReader br = new BufferedReader(I.stdInputStream());
         int t = I.inputInt(br);
         StringBuilder sb = new StringBuilder();
         while (t-- > 0) {
-
+            int n = I.inputInt(br);
+            char[] chars = I.inputString(br).toCharArray();
+            boolean flag = false;
+            for (int i = 0; i < n / 2; i++) {
+                char ch1 = chars[i];
+                char ch2 = chars[n - 1 - i];
+                int abs = Math.abs((int) (ch1) - (int) (ch2));
+                if (abs > 2 || abs == 1) {
+                    sb.append("No").append("\n");
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) sb.append("Yes").append("\n");
         }
         O.print(sb);
     }
