@@ -1,21 +1,37 @@
-package com.games.Templates.X;
+package com.games.problemset.sortings.ksushaandarray;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-    
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 public class Solution {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
         int t = I.inputInt(br);
-        StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
+        int[] arr = I.inputIntArray(br);
+        if (t == 1) {
+            O.print(arr[0]);
+            return;
         }
-        O.print(sb);
+        int g = gcd(arr[0], arr[1]);
+        for (int i = 2; i < arr.length; i++)
+            g = gcd(g, arr[i]);
+        for (int i : arr) if (g == i) {
+            O.print(g);
+            return;
+        }
+        O.print(-1);
     }
+
+    private static int gcd(int x, int y) {
+        if (x == 0) return y;
+        return gcd(y % x, x);
+    }
+
 
     public static class S {
 

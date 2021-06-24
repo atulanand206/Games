@@ -1,20 +1,21 @@
-package com.games.Templates.X;
+package com.games.problemset.sortings.geraldioncurrency;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-    
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
 public class Solution {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
         int t = I.inputInt(br);
-        StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
-        }
-        O.print(sb);
+        int[] arr = I.inputIntArray(br);
+        boolean ans = false;
+        for (int i : arr) if (i == 1) ans = true;
+        O.print(ans ? -1 : 1);
     }
 
     public static class S {

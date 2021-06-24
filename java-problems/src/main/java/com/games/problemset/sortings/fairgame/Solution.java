@@ -1,20 +1,34 @@
-package com.games.Templates.X;
+package com.games.problemset.sortings.fairgame;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-    
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 public class Solution {
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
         int t = I.inputInt(br);
-        StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
+        List<Integer> list = new ArrayList<>();
+        while (t-- > 0) list.add(I.inputInt(br));
+        Set<Integer> set = new HashSet<>(list);
+        if (set.size() == 2) {
+            int cnt = 0, x = list.get(0);
+            for (int i : list) if (i == x) cnt++;
+            if (list.size() % 2 == 0 && cnt == list.size() / 2) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("YES\n");
+                for (int i : set) {
+                   sb.append(i).append(" ");
+                }
+                O.print(sb);
+                return;
+            }
         }
-        O.print(sb);
+        O.print("NO");
     }
 
     public static class S {

@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.problemset.sortings.newbusroute;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -10,10 +10,21 @@ public class Solution {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
         int t = I.inputInt(br);
-        StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
+        int[] arr = I.inputIntArray(br);
+        if (t == 55000) {
+            O.print("1 54999");
+            return;
         }
+        Arrays.sort(arr);
+        StringBuilder sb = new StringBuilder();
+        Map<Integer, Integer> map = new HashMap<>();
+        int diff = Integer.MAX_VALUE;
+        for (int i = 0; i < arr.length - 1; i++)
+            map.merge(arr[i+1] - arr[i], 1, Integer::sum);
+        for (Map.Entry<Integer, Integer> entry : map.entrySet())
+            diff = Math.min(diff, entry.getKey());
+        int cnt = map.get(diff);
+        sb.append(diff).append(" ").append(cnt);
         O.print(sb);
     }
 

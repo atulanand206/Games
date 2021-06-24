@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.problemset.sortings.ranklist;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -6,15 +6,47 @@ import java.util.*;
     
 public class Solution {
 
+    private static class Item {
+        int solved;
+        int penalty;
+        int rank;
+        static Item of(int solved, int penalty) {
+            Item item = new Item();
+            item.solved = solved;
+            item.penalty = penalty;
+            return item;
+        }
+
+        public String toString() {
+            return String.format("(Solved: %d, Penalty: %d)", solved, penalty);
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
-        int t = I.inputInt(br);
+        int[] spec = I.inputIntArray(br);
+        int t = spec[0];
+        int kk = spec[1];
         StringBuilder sb = new StringBuilder();
+        List<Item> items = new ArrayList<>();
         while (t-- > 0) {
-
+            spec = I.inputIntArray(br);
+            items.add(Item.of(spec[0], spec[1]));
         }
-        O.print(sb);
+        items.sort((a, b) -> {
+            if (a.solved == b.solved) return Integer.compare(b.penalty, a.penalty);
+            return Integer.compare(b.solved, a.solved);
+        });
+        O.debug(S.stringi(items));
+        Item score = items.get(kk - 1);
+        int ans = 0;
+        O.debug(S.string(score));
+        for (Item i : items) {
+            if (i.solved == score.solved && i.penalty == score.penalty)
+                ans++;
+        }
+        O.print(ans);
     }
 
     public static class S {

@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.problemset.sortings.lalalandandappletrees;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -6,15 +6,106 @@ import java.util.*;
     
 public class Solution {
 
+    private static class Item {
+        int position;
+        int apples;
+        int rank;
+        static Item of(int position, int apples) {
+            Item item = new Item();
+            item.position = position;
+            item.apples = apples;
+            return item;
+        }
+
+        public String toString() {
+            return String.format("(Position: %d, Apples: %d)", position, apples);
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
         int t = I.inputInt(br);
-        StringBuilder sb = new StringBuilder();
+        List<Item> items = new ArrayList<>();
         while (t-- > 0) {
-
+            int[] spec = I.inputIntArray(br);
+            items.add(Item.of(spec[0], spec[1]));
         }
-        O.print(sb);
+        items.sort((a, b) -> Integer.compare(a.position, b.position));
+        int maxNeg = Integer.MIN_VALUE;
+        int minPos = Integer.MAX_VALUE;
+        for (Item item : items) {
+            if (item.position < 0 && item.position > maxNeg)
+                maxNeg = item.position;
+            if (item.position > 0 && item.position < minPos)
+                minPos = item.position;
+        }
+        int maxNegIx = maxNeg;
+        int minPosIx = minPos;
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).position == maxNeg)
+                maxNegIx = i;
+            if (items.get(i).position == minPos) 
+                minPosIx = i;
+        }
+        if (minPosIx == Integer.MAX_VALUE 
+            && maxNegIx == Integer.MIN_VALUE) {
+            O.print(0);
+            return;
+        }
+        if (minPosIx == Integer.MAX_VALUE) {
+            O.print(items.get(maxNegIx).apples);
+            return;
+        }
+        if (maxNegIx == Integer.MIN_VALUE) {
+            O.print(items.get(minPosIx).apples);
+            return;
+        }
+        int f = oneside(items, maxNegIx, minPosIx);
+        int g = otherside(items, maxNegIx, minPosIx);
+        O.print(Math.max(f, g));
+    }
+
+    private static int oneside(List<Item> items, int maxNegIx, int minPosIx) {
+        int p = maxNegIx;
+        int q = minPosIx;
+        int aaps = 0;
+        while (true) {
+            if (q < items.size()) {
+                aaps += items.get(q).apples;
+                q++;
+            } else {
+                break;
+            }
+            if (p >= 0) {
+                aaps += items.get(p).apples;
+                p--;
+            } else {
+                break;
+            }
+        }
+        return aaps;
+    }
+
+    private static int otherside(List<Item> items, int maxNegIx, int minPosIx) {
+        int p = maxNegIx;
+        int q = minPosIx;
+        int aaps = 0;
+        while (true) {
+            if (p >= 0) {
+                aaps += items.get(p).apples;
+                p--;
+            } else {
+                break;
+            }
+            if (q < items.size()) {
+                aaps += items.get(q).apples;
+                q++;
+            } else {
+                break;
+            }
+        }
+        return aaps;
     }
 
     public static class S {

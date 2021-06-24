@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.problemset.sortings.technogoblet;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -6,15 +6,56 @@ import java.util.*;
     
 public class Solution {
 
+    static class Item {
+        int power;
+        int school;
+        int index;
+        boolean isMax;
+
+        static Item of(int power, int school, int index) {
+            Item item = new Item();
+            item.power = power;
+            item.school = school;
+            item.index = index;
+            return item;
+        }
+
+        void setMax(boolean state) {
+            isMax = state;
+        }
+
+        public String toString() {
+            return String.format("(%d : %d : %d : %s)", school, power, index, isMax ? "T" : "F");
+        }
+    }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
-        int t = I.inputInt(br);
-        StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
+        int[] spec = I.inputIntArray(br);
+        int[] powers = I.inputIntArray(br);
+        int[] school = I.inputIntArray(br);
+        int[] chosen = I.inputIntArray(br);
+        int schools = spec[1];
+        List<Item> students = new ArrayList<>();
+        for (int i = 0; i < powers.length; i++)
+            students.add(Item.of(powers[i], school[i], i));
+        students.sort((a, b) -> {
+            if (a.school == b.school) return Integer.compare(b.power, a.power);
+            return Integer.compare(a.school, b.school);
+        });
+        students.get(0).setMax(true);
+        for (int i = 1; i < students.size(); i++) {
+            if (students.get(i).school != students.get(i-1).school)
+                students.get(i).setMax(true);
         }
-        O.print(sb);
+        O.debug(S.stringi(students));
+        int make = 0;
+        for (int i : chosen) 
+            for (Item student : students)
+                if (student.index == (i - 1) && !student.isMax)
+                    make++;
+        O.print(make);
     }
 
     public static class S {

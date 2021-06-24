@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.problemset.sortings.chesstourney;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -10,11 +10,9 @@ public class Solution {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
         int t = I.inputInt(br);
-        StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
-        }
-        O.print(sb);
+        int[] arr = I.inputIntArray(br);
+        Arrays.sort(arr);
+        O.print(arr[t] == arr[t - 1] ? "NO" : "YES");
     }
 
     public static class S {

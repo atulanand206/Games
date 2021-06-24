@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.problemset.sortings.sockets;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -9,12 +9,26 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
-        int t = I.inputInt(br);
-        StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
+        int[] spec = I.inputIntArray(br);
+        int devices = spec[1];
+        int sockets = spec[2];
+        int[] filters = I.inputIntArray(br);
+        Arrays.sort(filters);
+        int ftrs = 0;
+        for (int i = filters.length - 1; i >= 0; i--) {
+            if (devices <= sockets) {
+                O.print(ftrs);
+                return;
+            } else {
+                ftrs += 1;
+                sockets += filters[i] - 1;
+            }
         }
-        O.print(sb);
+        if (devices <= sockets) {
+            O.print(ftrs);
+            return;
+        }
+        O.print(-1);
     }
 
     public static class S {

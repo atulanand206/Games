@@ -1,4 +1,4 @@
-package com.games.Templates.X;
+package com.games.problemset.sortings.towers;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -10,10 +10,21 @@ public class Solution {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
         int t = I.inputInt(br);
+        int[] arr = I.inputIntArray(br);
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i : arr) map.merge(i, 1, Integer::sum);
+        int mmx = 0;
+        for (Map.Entry<Integer, Integer> i : map.entrySet()) 
+            if (i.getValue() > mmx) 
+                mmx = i.getValue();
         StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-
-        }
+        for (Map.Entry<Integer, Integer> i : map.entrySet())
+            if (i.getValue() == mmx) {
+                sb.append(i.getValue())
+                .append(" ")
+                .append(map.size());
+                break;
+            } 
         O.print(sb);
     }
 
