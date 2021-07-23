@@ -1,89 +1,71 @@
-package com.games.CodeChef.July21B.optimaldenomination;
+package com.games.atcoder.B209.E;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-    
+
 public class Solution {
+
+    static int M = 52 * 52 * 52;
+
+    static int char_to_int(char c) {
+        if ('A' <= c && c <= 'Z')
+            return c - 'A';
+        else
+            return c - 'a' + 26;
+    }
+
+    static int string_to_int(char a, char b, char c) {
+        return char_to_int(a) * 52 * 52 + char_to_int(b) * 52 + char_to_int(c);
+    }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
-        int t = I.inputInt(br);
+        int n = I.inputInt(br);
         StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-            int n = I.inputInt(br);
-            int[] arr = I.inputIntArray(br);
-            if (n == 1 || n == 2) {
-                sb.append(n).append("\n");
-                continue;
-            }
-            int temp = 0;
-            int[] gcdLeft = new int[n];
-            gcdLeft[0] = temp;
-            for (int ix = 1; ix < n; ix++) {
-                temp = gcd(arr[ix - 1], temp);
-                gcdLeft[ix] = temp;
-            }
-
-            temp = 0;
-            int[] gcdRight = new int[n];
-            gcdRight[n-1] = temp;
-            for (int ix = n-2; ix >= 0; ix--) {
-                temp = gcd(arr[ix + 1], temp);
-                gcdRight[ix] = temp;
-            }
-            /// 0,   1   2 
-            /// (0-0), (0-1), (0-2), (0-3)... (0 - x)..... (0 - (n-4)), (0 - (n-3)), (0 - (n-2)), (0 - (n - 1))
-            /// (0-(n-1)), (1 - (n-1)), (2-(n-1)), (3-(n-1)) ......(n - x - 1, n - 1) ... ....((n - 5)-(n - 1)) ((n - 4)-(n - 1)) ((n - 3)-(n - 1)) ((n - 2)-(n - 1)), ((n-1)-(n-1))
-            long[] mid = new long[n];
-            for (int i = 0; i < n; i++) {
-                int x = gcd(gcdLeft[i], gcdRight[i]);
-                mid[i] = x;
-            }
-
-            long maxHcf = 0;
-            for (int i = 0; i < n; i++) {
-                maxHcf = Math.max(maxHcf, mid[i]);
-            }
-
-            List<Integer> indxs = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                if (mid[i] == maxHcf)
-                    indxs.add(i);
-            }
-
-
-            long x = maxHcf;
-            long ix = 0;
-            if (indxs.size() == 1) {
-                ix = indxs.get(0);
-            } else {
-                long maxNotes = 0;
-                for (int i : indxs) {
-                    long xr = arr[i] / mid[i];
-                    if (xr > maxNotes) {
-                        maxNotes = xr;
-                        ix = i;
-                    }
+        List<List<Integer>> edge = new ArrayList<>();
+        for (int i = 0; i < n; i++) edge.add(new ArrayList<>());
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < M; i++) adj.add(new ArrayList<>());
+        List<String> words = new ArrayList<>();
+        int[] cnt = new int[M];
+        for (int i = 0; i < n; i++) {
+            String x = I.inputString(br);
+            words.add(x);
+            char[] chs = x.toCharArray();
+            List<Integer> e = new ArrayList<>();
+            e.add(string_to_int(chs[0], chs[1], chs[2]));
+            e.add(string_to_int(chs[chs.length - 3], chs[chs.length - 2], chs[chs.length - 1]));
+            cnt[e.get(0)]++;
+            edge.set(i, e);
+            adj.get(e.get(1)).add(e.get(0));
+        }
+        int[] ans = new int[M];
+        Arrays.fill(ans, -1);
+        Queue<Integer> que = new LinkedList<>();
+        for(int i = 0; i < M; i++) if(cnt[i] == 0){
+            ans[i] = 0;
+            que.add(i);
+        }
+        while(!que.isEmpty()) {
+            int t = que.poll();
+            for(int x : adj.get(t)) if(ans[x] == -1) {
+                cnt[x]--;
+                if(ans[t] == 0){
+                    ans[x] = 1; que.add(x);
+                }
+                else if(cnt[x] == 0){
+                    ans[x] = 0; que.add(x);
                 }
             }
-
-            int y = 0;
-            long k = Integer.MAX_VALUE;
-            for (int i = 0; i < n && i != ix; i++) {
-                y += arr[i] / x;
-                k = Math.min(k, arr[i] / x);
-            }
-            y += k;
-            sb.append(y).append("\n");
+        }
+        for(int i = 0; i < n; i++) {
+            if(ans[edge.get(i).get(1)] == -1) sb.append("Draw\n");
+            if(ans[edge.get(i).get(1)] == 0) sb.append("Takahashi\n");
+            if(ans[edge.get(i).get(1)] == 1) sb.append("Aoki\n");
         }
         O.print(sb);
-    }
-
-    private static int gcd(int x, int y) {
-        if (x == 0) return y;
-        return gcd(y % x, x);
     }
 
     public static class S {
@@ -95,8 +77,10 @@ public class Solution {
         public static String string(int[] array) {
             StringBuilder sb = new StringBuilder();
             openingBracket(sb);
-            for (int in : array) sb.append(in).append(", ");
-            if (array.length != 0) deleteLastComma(sb);
+            for (int in : array)
+                sb.append(in).append(", ");
+            if (array.length != 0)
+                deleteLastComma(sb);
             closingBracket(sb);
             return sb.toString();
         }
@@ -104,8 +88,10 @@ public class Solution {
         public static String string(long[] array) {
             StringBuilder sb = new StringBuilder();
             openingBracket(sb);
-            for (long in : array) sb.append(in).append(", ");
-            if (array.length != 0) deleteLastComma(sb);
+            for (long in : array)
+                sb.append(in).append(", ");
+            if (array.length != 0)
+                deleteLastComma(sb);
             closingBracket(sb);
             return sb.toString();
         }
@@ -113,8 +99,10 @@ public class Solution {
         public static String string(double[] array) {
             StringBuilder sb = new StringBuilder();
             openingBracket(sb);
-            for (double in : array) sb.append(in).append(", ");
-            if (array.length != 0) deleteLastComma(sb);
+            for (double in : array)
+                sb.append(in).append(", ");
+            if (array.length != 0)
+                deleteLastComma(sb);
             closingBracket(sb);
             return sb.toString();
         }
@@ -122,8 +110,10 @@ public class Solution {
         public static String string(boolean[] array) {
             StringBuilder sb = new StringBuilder();
             openingBracket(sb);
-            for (boolean in : array) sb.append(in ? "T" : "F").append(", ");
-            if (array.length != 0) deleteLastComma(sb);
+            for (boolean in : array)
+                sb.append(in ? "T" : "F").append(", ");
+            if (array.length != 0)
+                deleteLastComma(sb);
             closingBracket(sb);
             return sb.toString();
         }
@@ -131,8 +121,10 @@ public class Solution {
         public static String string(char[] array) {
             StringBuilder sb = new StringBuilder();
             openingBracket(sb);
-            for (char in : array) sb.append(in).append(", ");
-            if (array.length != 0) deleteLastComma(sb);
+            for (char in : array)
+                sb.append(in).append(", ");
+            if (array.length != 0)
+                deleteLastComma(sb);
             closingBracket(sb);
             return sb.toString();
         }
@@ -140,8 +132,10 @@ public class Solution {
         public static String string(String[] array) {
             StringBuilder sb = new StringBuilder();
             openingBracket(sb);
-            for (String in : array) sb.append(in).append(", ");
-            if (array.length != 0) deleteLastComma(sb);
+            for (String in : array)
+                sb.append(in).append(", ");
+            if (array.length != 0)
+                deleteLastComma(sb);
             closingBracket(sb);
             return sb.toString();
         }
@@ -149,7 +143,8 @@ public class Solution {
         public static String string(int[][] array) {
             StringBuilder sb = new StringBuilder();
             openingBracketWithNewLine(sb);
-            for (int[] in : array) sb.append("  ").append(string(in));
+            for (int[] in : array)
+                sb.append("  ").append(string(in));
             closingBracket(sb);
             return sb.toString();
         }
@@ -157,7 +152,8 @@ public class Solution {
         public static String string(long[][] array) {
             StringBuilder sb = new StringBuilder();
             openingBracketWithNewLine(sb);
-            for (long[] in : array) sb.append("  ").append(string(in));
+            for (long[] in : array)
+                sb.append("  ").append(string(in));
             closingBracket(sb);
             return sb.toString();
         }
@@ -165,7 +161,8 @@ public class Solution {
         public static String string(double[][] array) {
             StringBuilder sb = new StringBuilder();
             openingBracketWithNewLine(sb);
-            for (double[] in : array) sb.append("  ").append(string(in));
+            for (double[] in : array)
+                sb.append("  ").append(string(in));
             closingBracket(sb);
             return sb.toString();
         }
@@ -173,7 +170,8 @@ public class Solution {
         public static <T> String string(boolean[][] array) {
             StringBuilder sb = new StringBuilder();
             openingBracketWithNewLine(sb);
-            for (boolean[] in : array) sb.append("  ").append(string(in));
+            for (boolean[] in : array)
+                sb.append("  ").append(string(in));
             closingBracket(sb);
             return sb.toString();
         }
@@ -181,7 +179,8 @@ public class Solution {
         public static String string(char[][] array) {
             StringBuilder sb = new StringBuilder();
             openingBracketWithNewLine(sb);
-            for (char[] in : array) sb.append("  ").append(string(in));
+            for (char[] in : array)
+                sb.append("  ").append(string(in));
             closingBracket(sb);
             return sb.toString();
         }
@@ -189,22 +188,26 @@ public class Solution {
         public static String string(String[][] array) {
             StringBuilder sb = new StringBuilder();
             openingBracketWithNewLine(sb);
-            for (String[] in : array) sb.append("  ").append(string(in));
+            for (String[] in : array)
+                sb.append("  ").append(string(in));
             closingBracket(sb);
             return sb.toString();
         }
 
         public static <T> String stringi(List<T> list) {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < list.size(); i++) sb.append(i).append(": ").append(list.get(i)).append("\n");
+            for (int i = 0; i < list.size(); i++)
+                sb.append(i).append(": ").append(list.get(i)).append("\n");
             return sb.toString();
         }
 
         public static <T> String string(Collection<T> collection) {
             StringBuilder sb = new StringBuilder();
             openingBracket(sb);
-            for (T t : collection) sb.append(t).append(", ");
-            if (!collection.isEmpty()) deleteLastComma(sb);
+            for (T t : collection)
+                sb.append(t).append(", ");
+            if (!collection.isEmpty())
+                deleteLastComma(sb);
             closingBracket(sb);
             return sb.toString();
         }
@@ -212,7 +215,8 @@ public class Solution {
         public static <T> String string2D(Collection<Collection<T>> collection) {
             StringBuilder sb = new StringBuilder();
             openingBracketWithNewLine(sb);
-            for (Collection<T> t : collection) sb.append("  ").append(string(t));
+            for (Collection<T> t : collection)
+                sb.append("  ").append(string(t));
             closingBracket(sb);
             return sb.toString();
         }
@@ -220,7 +224,8 @@ public class Solution {
         public static <T> String string2Di(List<Collection<T>> list) {
             StringBuilder sb = new StringBuilder();
             openingBracketWithNewLine(sb);
-            for (int i = 0; i < list.size(); i++) sb.append("  ").append(i).append(": ").append(string(list.get(i)));
+            for (int i = 0; i < list.size(); i++)
+                sb.append("  ").append(i).append(": ").append(string(list.get(i)));
             closingBracket(sb);
             return sb.toString();
         }
@@ -259,7 +264,8 @@ public class Solution {
         public static int[] inputIntArray(BufferedReader br) throws IOException {
             String[] spec = br.readLine().split(" ");
             int[] arr = new int[spec.length];
-            for (int i = 0; i < spec.length; i++) arr[i] = Integer.parseInt(spec[i]);
+            for (int i = 0; i < spec.length; i++)
+                arr[i] = Integer.parseInt(spec[i]);
             return arr;
         }
 
@@ -270,7 +276,8 @@ public class Solution {
         public static long[] inputLongArray(BufferedReader br) throws IOException {
             String[] spec = br.readLine().split(" ");
             long[] arr = new long[spec.length];
-            for (int i = 0; i < spec.length; i++) arr[i] = Long.parseLong(spec[i]);
+            for (int i = 0; i < spec.length; i++)
+                arr[i] = Long.parseLong(spec[i]);
             return arr;
         }
 
@@ -283,8 +290,8 @@ public class Solution {
         }
 
         private static InputStreamReader inputStream() throws IOException {
-            return ("why in the world not?".equals(System.getenv("LOCAL_CODING")))
-                    ? fileInputStream() : stdInputStream();
+            return ("why in the world not?".equals(System.getenv("LOCAL_CODING"))) ? fileInputStream()
+                    : stdInputStream();
         }
 
         private static InputStreamReader stdInputStream() {
@@ -323,7 +330,8 @@ public class Solution {
         }
 
         public static void debug(String text, boolean append) {
-            if (!"why in the world not?".equals(System.getenv("LOCAL_CODING"))) return;
+            if (!"why in the world not?".equals(System.getenv("LOCAL_CODING")))
+                return;
             try {
                 FileWriter fileWriter = new FileWriter("debug.txt", append);
                 fileWriter.write(text);
@@ -334,7 +342,7 @@ public class Solution {
         }
 
         public static <T> void print(T object) {
-        System.out.println(object);
+            System.out.println(object);
         }
     }
 }

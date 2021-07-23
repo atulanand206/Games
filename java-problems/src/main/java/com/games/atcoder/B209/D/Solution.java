@@ -1,4 +1,4 @@
-package com.games.CodeChef.July21B.optimaldenomination;
+package com.games.atcoder.B209.D;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -9,81 +9,42 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
-        int t = I.inputInt(br);
+        int[] spec = I.inputIntArray(br);
+        List<List<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < spec[0]; i++) adj.add(new ArrayList<>());
+        for (int i = 0; i < spec[0] - 1; i++) {
+            int[] edge = I.inputIntArray(br);
+            edge[0]--; edge[1]--;
+            adj.get(edge[0]).add(edge[1]);
+            adj.get(edge[1]).add(edge[0]);
+        }
         StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-            int n = I.inputInt(br);
-            int[] arr = I.inputIntArray(br);
-            if (n == 1 || n == 2) {
-                sb.append(n).append("\n");
-                continue;
-            }
-            int temp = 0;
-            int[] gcdLeft = new int[n];
-            gcdLeft[0] = temp;
-            for (int ix = 1; ix < n; ix++) {
-                temp = gcd(arr[ix - 1], temp);
-                gcdLeft[ix] = temp;
-            }
-
-            temp = 0;
-            int[] gcdRight = new int[n];
-            gcdRight[n-1] = temp;
-            for (int ix = n-2; ix >= 0; ix--) {
-                temp = gcd(arr[ix + 1], temp);
-                gcdRight[ix] = temp;
-            }
-            /// 0,   1   2 
-            /// (0-0), (0-1), (0-2), (0-3)... (0 - x)..... (0 - (n-4)), (0 - (n-3)), (0 - (n-2)), (0 - (n - 1))
-            /// (0-(n-1)), (1 - (n-1)), (2-(n-1)), (3-(n-1)) ......(n - x - 1, n - 1) ... ....((n - 5)-(n - 1)) ((n - 4)-(n - 1)) ((n - 3)-(n - 1)) ((n - 2)-(n - 1)), ((n-1)-(n-1))
-            long[] mid = new long[n];
-            for (int i = 0; i < n; i++) {
-                int x = gcd(gcdLeft[i], gcdRight[i]);
-                mid[i] = x;
-            }
-
-            long maxHcf = 0;
-            for (int i = 0; i < n; i++) {
-                maxHcf = Math.max(maxHcf, mid[i]);
-            }
-
-            List<Integer> indxs = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                if (mid[i] == maxHcf)
-                    indxs.add(i);
-            }
-
-
-            long x = maxHcf;
-            long ix = 0;
-            if (indxs.size() == 1) {
-                ix = indxs.get(0);
-            } else {
-                long maxNotes = 0;
-                for (int i : indxs) {
-                    long xr = arr[i] / mid[i];
-                    if (xr > maxNotes) {
-                        maxNotes = xr;
-                        ix = i;
-                    }
-                }
-            }
-
-            int y = 0;
-            long k = Integer.MAX_VALUE;
-            for (int i = 0; i < n && i != ix; i++) {
-                y += arr[i] / x;
-                k = Math.min(k, arr[i] / x);
-            }
-            y += k;
-            sb.append(y).append("\n");
+        boolean[] shades = meetUp(adj);
+        for (int i = 0; i < spec[1]; i++) {
+            int[] query = I.inputIntArray(br);
+            query[0]--; query[1]--;
+            sb.append(shades[query[0]] == shades[query[1]] ? "Town" : "Road").append("\n");
         }
         O.print(sb);
     }
 
-    private static int gcd(int x, int y) {
-        if (x == 0) return y;
-        return gcd(y % x, x);
+    private static boolean[] meetUp(List<List<Integer>> adj) {
+        Queue<Integer> q = new LinkedList<>();
+        boolean[] vis = new boolean[adj.size()];
+        boolean[] dist = new boolean[adj.size()];
+        q.add(0);
+        vis[0] = true;
+        while (!q.isEmpty()) {
+            int x = q.poll();
+            for (int i : adj.get(x)) {
+                if (!vis[i]) {
+                    dist[i] = !dist[x];
+                    vis[i] = true;
+                    q.add(i);
+                }
+            }
+        }
+        return dist;
     }
 
     public static class S {
@@ -334,7 +295,7 @@ public class Solution {
         }
 
         public static <T> void print(T object) {
-        System.out.println(object);
+            System.out.println(object);
         }
     }
 }

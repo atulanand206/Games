@@ -1,4 +1,4 @@
-package com.games.CodeChef.July21B.optimaldenomination;
+package com.games.problemset.sortings.sortthearray;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -9,81 +9,58 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
-        int t = I.inputInt(br);
+        int n = I.inputInt(br);
         StringBuilder sb = new StringBuilder();
-        while (t-- > 0) {
-            int n = I.inputInt(br);
-            int[] arr = I.inputIntArray(br);
-            if (n == 1 || n == 2) {
-                sb.append(n).append("\n");
-                continue;
+        int[] arr = I.inputIntArray(br);
+        int[] res = arr.clone();
+        Arrays.sort(res);
+        boolean[] change = new boolean[n];
+        for (int i = 0; i < n; i++)
+            change[i] = arr[i] != res[i];
+        boolean found = false, ended = false;
+        int fIx = -1, eIx = -1;
+        boolean flag = false;
+        for (int i = 0; i < change.length; i++) {
+            boolean ch = change[i];
+            if (ch && !found) {
+                found = true;
+                fIx = i;
             }
-            int temp = 0;
-            int[] gcdLeft = new int[n];
-            gcdLeft[0] = temp;
-            for (int ix = 1; ix < n; ix++) {
-                temp = gcd(arr[ix - 1], temp);
-                gcdLeft[ix] = temp;
+            if (!ch && found) {
+                ended = true;
+                eIx = i;
             }
-
-            temp = 0;
-            int[] gcdRight = new int[n];
-            gcdRight[n-1] = temp;
-            for (int ix = n-2; ix >= 0; ix--) {
-                temp = gcd(arr[ix + 1], temp);
-                gcdRight[ix] = temp;
+            if (ch && ended) {
+                flag = true;
+                sb.append("no\n");
+                break;
             }
-            /// 0,   1   2 
-            /// (0-0), (0-1), (0-2), (0-3)... (0 - x)..... (0 - (n-4)), (0 - (n-3)), (0 - (n-2)), (0 - (n - 1))
-            /// (0-(n-1)), (1 - (n-1)), (2-(n-1)), (3-(n-1)) ......(n - x - 1, n - 1) ... ....((n - 5)-(n - 1)) ((n - 4)-(n - 1)) ((n - 3)-(n - 1)) ((n - 2)-(n - 1)), ((n-1)-(n-1))
-            long[] mid = new long[n];
-            for (int i = 0; i < n; i++) {
-                int x = gcd(gcdLeft[i], gcdRight[i]);
-                mid[i] = x;
-            }
-
-            long maxHcf = 0;
-            for (int i = 0; i < n; i++) {
-                maxHcf = Math.max(maxHcf, mid[i]);
-            }
-
-            List<Integer> indxs = new ArrayList<>();
-            for (int i = 0; i < n; i++) {
-                if (mid[i] == maxHcf)
-                    indxs.add(i);
-            }
-
-
-            long x = maxHcf;
-            long ix = 0;
-            if (indxs.size() == 1) {
-                ix = indxs.get(0);
+        }
+        if (found && !ended) {
+            ended = true;
+            eIx = n - 1;
+        }
+        O.debug(S.string(arr));
+        O.debug(S.string(res));
+        O.debug(S.string(change));
+        if (!flag) {
+            flag = false;
+            if (fIx == -1) {
+                sb.append("yes\n1 1\n");
             } else {
-                long maxNotes = 0;
-                for (int i : indxs) {
-                    long xr = arr[i] / mid[i];
-                    if (xr > maxNotes) {
-                        maxNotes = xr;
-                        ix = i;
+                for (int i = fIx, k = 0; i <= eIx; i++) {
+                    if (arr[i + k] != res[eIx - k]) {
+                        sb.append("no\n");
+                        flag = true;
+                        break;
                     }
                 }
+                if (!flag) {
+                    sb.append("yes\n").append(fIx + 1).append(" ").append(eIx + 1).append("\n");
+                }
             }
-
-            int y = 0;
-            long k = Integer.MAX_VALUE;
-            for (int i = 0; i < n && i != ix; i++) {
-                y += arr[i] / x;
-                k = Math.min(k, arr[i] / x);
-            }
-            y += k;
-            sb.append(y).append("\n");
         }
         O.print(sb);
-    }
-
-    private static int gcd(int x, int y) {
-        if (x == 0) return y;
-        return gcd(y % x, x);
     }
 
     public static class S {
@@ -334,7 +311,7 @@ public class Solution {
         }
 
         public static <T> void print(T object) {
-        System.out.println(object);
+            System.out.println(object);
         }
     }
 }

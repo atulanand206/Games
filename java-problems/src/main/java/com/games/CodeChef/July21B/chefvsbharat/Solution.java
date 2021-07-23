@@ -9,6 +9,73 @@ public class Solution {
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(I.inputStream());
         O.attach();
+        long[] chefNums = getChefora();
+        long[] calct = calc();
+        O.debug(chefNums.length + " " + calct.length + "\n");
+
+        O.debug(S.string(calct));
+        O.debug(chefNums[115] + "\n");
+        chefNums = calct;
+
+        O.debug(S.string(chefNums));
+
+        long[] sum = new long[chefNums.length];
+        sum[0] = 0;
+        for (int i = 1; i < sum.length; i++)
+            sum[i] = sum[i - 1] + chefNums[i - 1];
+
+        int t = I.inputInt(br);
+        StringBuilder sb = new StringBuilder();
+        while (t-- > 0) {
+            int[] spec = I.inputIntArray(br);
+            int l = spec[0], r = spec[1];
+            long al = chefNums[l - 1];
+            O.debug(al);
+            long pr = sum[r];
+            long pl = sum[l];
+            long ais = pr - pl;
+            O.debug(ais);
+            sb.append(exponent(al, ais)).append("\n");
+        }
+        O.print(sb);
+    }
+
+    private static long[] calc() {
+        long[] chefora = new long[(int) 1E5 + 5];
+        for (int i = 0; i < chefora.length; i++) {
+            int x = i + 1;
+            StringBuilder k = new StringBuilder();
+            k.append(x);
+            if (k.length() == 1) {
+                chefora[i] = x;
+                continue;
+            }
+            String z = new StringBuilder(k).reverse().substring(1);
+            k.append(z);
+            chefora[i] = Long.parseLong(k.toString());
+        } 
+        return chefora;
+    }
+
+    private static int MOD = (int) (1E9 + 7);
+
+    private static long exponent(long x, long y) {
+        long res = 1; // Initialize result
+
+        while (y > 0) {
+
+            // If y is odd, multiply x with result
+            if ((y & 1) != 0)
+                res = (res * x) % MOD;
+
+            // y must be even now
+            y = y >> 1; // y = y/2
+            x = (x * x) % MOD; // Change x to x^2
+        }
+        return res;
+    }
+
+    private static long[] getChefora() {
         char[][] chefora = new char[(int) 1E5 + 5][];
         chefora[0] = new char[] { '1' };
         int ix = 0;
@@ -17,20 +84,10 @@ public class Solution {
             char[] n = p.clone();
             if (p[ix] < '9') {
                 n[ix]++;
-            } else if (ix > 0) {
-                if (p[ix]=='9') {
-                    n[ix - 1]++;
-                    n[p.length - ix]++;
-                    for (int z = ix; z < p.length - ix; z++) {
-                        n[z] = '0';
-                    } 
-                    ix = n.length / 2;
-                } else {
-                    ix--;
-                    n[ix]++;
-                    n[n.length - ix]++;
-                }
-            } else if (ix == 0) {
+                chefora[i] = n;
+                continue;
+            }
+            if (ix == 0) {
                 n = new char[p.length + 2];
                 n[0] = '1';
                 for (int z = 1; z < n.length - 1; z++) {
@@ -38,19 +95,32 @@ public class Solution {
                 }
                 n[n.length - 1] = '1';
                 ix = n.length / 2;
+                chefora[i] = n;
+                continue;
+            }
+            while (ix > 0 && n[ix - 1] == '9') {
+                ix--;
+            }
+            if (ix > 0 && n[ix - 1] < '9') {
+                n[ix - 1]++;
+                n[p.length - ix]++;
+                for (int z = ix; z < p.length - ix; z++) {
+                    n[z] = '0';
+                }
+                ix = n.length / 2;
             }
             chefora[i] = n;
         }
-        for (int i = 0; i < 200; i++)
-            O.debug(S.string(chefora[i]));
-        // int t = I.inputInt(br);
-        // StringBuilder sb = new StringBuilder();
-        // while (t-- > 0) {
-        //     int[] spec = I.inputIntArray(br);
-        //     // int l = spec[0], r = spec[1];
-
-        // }
-        // O.print(sb);
+        Set<String> set = new TreeSet<>();
+        long[] chefNums = new long[chefora.length];
+        for (int i = 0; i < chefora.length; i++) {
+            String s = new String(chefora[i]);
+            if (!set.contains(s) && s != "0") {
+                chefNums[i] = Long.parseLong(s);
+                set.add(s);
+            }
+        }
+        return chefNums;
     }
 
     public static class S {
