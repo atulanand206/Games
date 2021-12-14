@@ -18,8 +18,8 @@ import com.games.CodeForces.alexandbrokencontest.Solution.O;
 
 public class DumboOctopus {
 
-  private static final int[][] directions = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 },
-      { -1, -1 }, { -1, 1 }, { 1, -1 }, { 1, 1 } };
+  private static final int[][] directions = new int[][] { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 }, { -1, -1 },
+      { -1, 1 }, { 1, -1 }, { 1, 1 } };
 
   public static void main(String[] args) throws Exception {
     BufferedReader br = new BufferedReader(I.fileInputStream());
@@ -35,24 +35,30 @@ public class DumboOctopus {
         for (int j = 0; j < lines[i].length; j++)
           lines[i][j] = (lines[i][j] + 1) % 10;
       int[][] da = new int[10][10];
-      for (int i = 0; i < lines.length; i++)
-        for (int j = 0; j < lines[i].length; j++)
-          if (lines[i][j] != 0) {
-            int xx = 0; 
-            for (int[] direction : directions) 
-              if (isValid(i, j, direction)) {
-                int val = value(lines, i, j, direction);
-                int ni = i + direction[0];
-                int nj = j  + direction[1];
-                da[ni][nj] = val + 1;
-                xx++;
-              }
-            da[i][j] = lines[i][j] + xx >= 10 ? 0 : (lines[i][j] + xx) % 10;
-          }
+      int q = 100;
+      while (q != 0) {
+        q = 0;
+        for (int i = 0; i < lines.length; i++)
+          for (int j = 0; j < lines[i].length; j++)
+            if (lines[i][j] != 0) {
+              int xx = 0;
+              for (int[] direction : directions)
+                if (isValid(i, j, direction)) {
+                  int val = value(lines, i, j, direction);
+                  int ni = i + direction[0];
+                  int nj = j + direction[1];
+                  xx++;
+                }
+              if (lines[i][j] + xx >= 10)
+                q++;
+              da[i][j] = lines[i][j] + xx >= 10 ? 0 : (lines[i][j] + xx) % 10;
+            }
+      }
       lines = da;
       for (int i = 0; i < lines.length; i++)
         for (int j = 0; j < lines[i].length; j++)
-          if (lines[i][j] == 0) z++;
+          if (lines[i][j] == 0)
+            z++;
       O.debug(S.string(lines));
     }
     O.print(z);
@@ -60,13 +66,13 @@ public class DumboOctopus {
 
   private static boolean isValid(int i, int j, int[] direction) {
     int ni = i + direction[0];
-    int nj = j  + direction[1];
+    int nj = j + direction[1];
     return (ni >= 0 && ni < 10 && nj >= 0 && nj < 10);
   }
 
   private static int value(int[][] lines, int i, int j, int[] direction) {
     int ni = i + direction[0];
-    int nj = j  + direction[1];
+    int nj = j + direction[1];
     return lines[ni][nj];
   }
 
@@ -96,7 +102,7 @@ public class DumboOctopus {
       for (int in : array)
         sb.append(in).append("");
       // if (array.length != 0)
-      //   deleteLastComma(sb);
+      // deleteLastComma(sb);
       sb.append("\n");
       return sb.toString();
     }
