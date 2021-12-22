@@ -2,6 +2,7 @@ package com.games.CodeForces.chatban;
 
 import com.games.utils.I;
 import com.games.utils.O;
+import com.games.utils.S;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class Solution {
         StringBuilder sb = new StringBuilder();
         while (t-- > 0) {
             long[] q = inputLongArray(br);
-//            O.debug(S.string(q));
+            O.debug(S.string(q));
             long k = q[0], x = q[1], ans = 0;
             if (maxMessages(k) <= x) {
                 sb.append(2 * k - 1).append("\n");
@@ -69,16 +70,18 @@ public class Solution {
             if (xForBottomTriangle > 0) {
                 long bottomTriangle = bottomRows(xForBottomTriangle, k - 1);
                 lines += k - bottomTriangle;
-                long xInBottomTriangle = sumDec(k - 1, bottomTriangle);
+                long xInBottomTriangle = sumDec(k - 1, bottomTriangle - 1);
 //                O.debug(S.string("k                  " + (k)));
-//                O.debug(S.string("bottomTriangle     " + (bottomTriangle)));
-//                O.debug(S.string("xInBottomTriangle  " + (xInBottomTriangle)));
-//                O.debug(S.string("xForBottomTriangle " + (xForBottomTriangle)));
+                O.debug(S.string("bottomTriangle     " + (bottomTriangle)));
+                O.debug(S.string("xInTopTriangle     " + (xInTopTriangle)));
+                O.debug(S.string("xInBottomTriangle  " + (xInBottomTriangle)));
+                O.debug(S.string("xForBottomTriangle " + (xForBottomTriangle)));
 //                O.debug(S.string("xdifBottomTriangle " + (xInBottomTriangle - xForBottomTriangle)));
 
-                if (xInBottomTriangle < xForBottomTriangle) lines++;
+//                if (xInBottomTriangle < xForBottomTriangle) lines++;
+//                if (xInBottomTriangle > xForBottomTriangle) lines--;
             }
-//            O.debugNewLine();
+            O.debugNewLine();
             sb.append(lines).append("\n");
         }
         System.out.println(sb);
@@ -93,28 +96,46 @@ public class Solution {
         return 0;
     }
 
-    private static long bottomRows(long x, long k) {
+    private static long bottomRows(long x, long max) {
         if (x == 0) return 0;
+        if (x >= sumN(max)) return max;
         long e = 1, mid = 0;
-        long s = k;
-//        O.debug(" --s-- " + s + " --e-- " + e + " --mid-- " + mid + " --x-- " + x + "\n");
+        long s = max;
+        O.debug(" --s-- " + s + " --e-- " + e + " --mid-- " + mid + " --x-- " + x + "\n");
         while (s > e) {
             mid = (s + e) / 2;
-            long val = sumDec(k, mid);
+            long val = sumDec(max, mid);
 //            O.debug(S.string("mid " + mid + " val " + val));
-            if ((val <= x && sumDec(k, mid - 1) > x)) return mid + (x - val > 0 ? 1 : 0);
-            if (val > x) {
-                e = mid + 1;
-            } else {
+//            if (val == x) return mid;
+//            if ((val < x && sumDec(max, mid - 1) > x)) return mid + 1;
+            if (val < x) {
                 s = mid - 1;
+            } else {
+                e = mid + 1;
             }
         }
 //        O.debug(S.string("mid " + mid));
         return mid;
     }
 
+//    private static long bottomRows(long x, long max) {
+//        if (x == 0) return 0;
+//        if (x >= sumN(max)) return max;
+
+        /*
+        a[0] = 0 = sumN(max) - sumN(max - i)
+        a[1] = max = sumN(max) - sumN(max - 1)
+        a[2] = max + (max-1) = sumN(max) - sumN(max - 2)
+        a[i] = sumN(max) - sumN(max - i)
+
+        x - a[i] > 0
+         */
+
+//        return 0;
+//    }
+
     private static long sumDec(long max, long min) {
-        return sumN(max) - sumN(min - 1);
+        return sumN(max) - sumN(min);
     }
 
     private static long sumN(long n) {
