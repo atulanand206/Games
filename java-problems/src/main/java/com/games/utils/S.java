@@ -1,5 +1,6 @@
 package com.games.utils;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -10,10 +11,24 @@ public class S {
     return val + "\n";
   }
 
+  public static String string(int[] array, int chunks) {
+    StringBuilder sb = new StringBuilder();
+    openingBracket(sb);
+    for (int i = 0; i < array.length; i++) {
+      int in = array[i];
+      sb.append(String.format("%2d", in));
+      if (i % chunks != chunks - 1) sb.append(", ");
+      else sb.append("\n");
+    }
+//    if (array.length != 0) deleteLastComma(sb);
+    closingBracket(sb);
+    return sb.toString();
+  }
+
   public static String string(int[] array) {
     StringBuilder sb = new StringBuilder();
     openingBracket(sb);
-    for (int in : array) sb.append(in).append(", ");
+    for (int in : array) sb.append(String.format("%2d", in)).append(", ");
     if (array.length != 0) deleteLastComma(sb);
     closingBracket(sb);
     return sb.toString();
