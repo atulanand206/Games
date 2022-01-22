@@ -1,0 +1,8 @@
+[ab, bad]
+[ab, bad]
+[co, def, es, orc]
+[orc, def, co, es]
+[ab, cba, cd]
+[cba, ab, cd]
+[ab, ab]
+[ab, ab]
