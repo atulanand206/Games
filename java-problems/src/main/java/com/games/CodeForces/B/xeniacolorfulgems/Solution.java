@@ -15,11 +15,66 @@ import java.util.Arrays;
  */
 public class Solution {
 
-    private long solve(int[] r, int[] g, int[] b) {
-        Arrays.sort(r);
-        Arrays.sort(g);
-        Arrays.sort(b);
-        return leftToRight(r, g, b);
+    private long solve(int[][] r) {
+        Arrays.sort(r[0]);
+        Arrays.sort(r[1]);
+        Arrays.sort(r[2]);
+        return search(r);
+    }
+
+    private long search(int[][] lists) {
+        long res = Long.MAX_VALUE;
+        for (int i = 0; i < lists.length; i++) {
+            for (int j = 0; j < lists.length; j++) {
+                for (int k = 0; k < lists.length; k++) {
+                    if ((i == j) || (j == k) || (k == i)) continue;
+                    for (int item : lists[i]) {
+                        int x = lowerBound(lists[j], item);
+                        int y = upperBound(lists[k], item);
+                        res = Math.min(res, value(item, x, y));
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    private int lowerBound(int[] list, int target) {
+        int low = 0, high = list.length - 1;
+        int res = low;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (list[mid] <= target) {
+                res = Math.max(res, mid);
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        return list[res];
+    }
+
+    private int upperBound(int[] list, int target) {
+        int low = 0, high = list.length - 1;
+        int res = high;
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (list[mid] >= target) {
+                res = Math.min(res, mid);
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return list[res];
+    }
+
+    private long value(long a, long b, long c) {
+        return powSqr(a, b) + powSqr(b, c) + powSqr(c, a);
+    }
+
+    private long powSqr(long a, long b) {
+        return ((a - b) * (a - b));
     }
 
     private long leftToRight(int[] r, int[] g, int[] b) {
@@ -37,14 +92,6 @@ public class Solution {
         return res;
     }
 
-    private long value(long a, long b, long c) {
-        return powSqr(a, b) + powSqr(b, c) + powSqr(c, a);
-    }
-
-    private long powSqr(long a, long b) {
-        return ((a - b) * (a - b));
-    }
-
     public static void main(String[] args) throws IOException {
         O.attach();
         BufferedReader br = new BufferedReader(I.reader(true));
@@ -53,10 +100,11 @@ public class Solution {
         StringBuilder sb = new StringBuilder();
         while (t-- > 0) {
             int[] m = inputIntArray(br);
-            int[] r = inputIntArray(br);
-            int[] g = inputIntArray(br);
-            int[] b = inputIntArray(br);
-            sb.append(new Solution().solve(r, g, b)).append("\n");
+            int[][] numbers = new int[3][];
+            numbers[0] = inputIntArray(br);
+            numbers[1] = inputIntArray(br);
+            numbers[2] = inputIntArray(br);
+            sb.append(new Solution().solve(numbers)).append("\n");
         }
         System.out.println(sb);
     }

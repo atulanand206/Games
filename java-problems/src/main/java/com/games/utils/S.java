@@ -11,6 +11,10 @@ public class S {
     return val + "\n";
   }
 
+  public static <T> String stringf(T val, int f) {
+    return String.format("%" + f + "s\n", val);
+  }
+
   public static String string(int[] array, int chunks) {
     StringBuilder sb = new StringBuilder();
     openingBracket(sb);
