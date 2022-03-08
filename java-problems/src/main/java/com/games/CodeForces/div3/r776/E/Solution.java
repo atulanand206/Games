@@ -1,33 +1,24 @@
-package com.games.CodeForces.C.deepdownbelow;
+package com.games.CodeForces.div3.r776.E;
 
 import com.games.utils.I;
 import com.games.utils.O;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
 
 /**
- * Problem: CF 1561C
+ * Problem: CF 1650E
  *
  * @author atulanand
  */
 
 public class Solution {
-    static class Result {
 
-        public String solve(int a) {
+    static class Result {
+        public String solve(int[] nums, int last) {
             StringBuilder sb = new StringBuilder();
-            int bit = 0;
-            while ((1 << (bit + 1)) <= a - 1) bit++;
-            for (int i = (1 << bit) - 1; i >= 0; i--) {
-                sb.append(i).append(" ");
-            }
-            for (int i = (1 << bit); i < a; i++) {
-                sb.append(i).append(" ");
-            }
+            int idx = 0;
             return sb.toString();
         }
     }
@@ -39,7 +30,9 @@ public class Solution {
         int t = inputInt(br);
         StringBuilder sb = new StringBuilder();
         while (t-- > 0) {
-            sb.append(new Result().solve(inputInt(br))).append("\n");
+            br.readLine();
+            int[] specs = inputIntArray(br);
+            sb.append(new Result().solve(inputIntArray(br), specs[1])).append("\n");
         }
         System.out.println(sb);
     }

@@ -1,32 +1,43 @@
-package com.games.CodeForces.C.deepdownbelow;
+package com.games.CodeForces.div3.r776.D;
 
 import com.games.utils.I;
 import com.games.utils.O;
+import com.games.utils.S;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
- * Problem: CF 1561C
+ * Problem: CF 1650D
  *
  * @author atulanand
  */
 
 public class Solution {
-    static class Result {
 
-        public String solve(int a) {
-            StringBuilder sb = new StringBuilder();
-            int bit = 0;
-            while ((1 << (bit + 1)) <= a - 1) bit++;
-            for (int i = (1 << bit) - 1; i >= 0; i--) {
-                sb.append(i).append(" ");
+    static class Result {
+        public String solve(int[] nums) {
+            LinkedList<Integer> queue = new LinkedList<>();
+            for (int i : nums) {
+                queue.add(i);
             }
-            for (int i = (1 << bit); i < a; i++) {
-                sb.append(i).append(" ");
+            int[] res = new int[nums.length];
+            int i = res.length - 1;
+            while (!queue.isEmpty()) {
+                while (!queue.isEmpty() && queue.peek() != queue.size()) {
+                    queue.add(queue.poll());
+                    res[i]++;
+                }
+                res[i]++;
+                res[i] %= queue.size();
+                queue.poll();
+                i--;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (int x : res) {
+                sb.append(x).append(" ");
             }
             return sb.toString();
         }
@@ -39,7 +50,8 @@ public class Solution {
         int t = inputInt(br);
         StringBuilder sb = new StringBuilder();
         while (t-- > 0) {
-            sb.append(new Result().solve(inputInt(br))).append("\n");
+            br.readLine();
+            sb.append(new Result().solve(inputIntArray(br))).append("\n");
         }
         System.out.println(sb);
     }

@@ -1,16 +1,14 @@
-package com.games.CodeForces.C.deepdownbelow;
+package com.games.CodeForces.div3.r776.B;
 
 import com.games.utils.I;
 import com.games.utils.O;
+import com.games.utils.S;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
- * Problem: CF 1561C
+ * Problem: CF 1650B
  *
  * @author atulanand
  */
@@ -18,17 +16,30 @@ import java.util.Map;
 public class Solution {
     static class Result {
 
-        public String solve(int a) {
-            StringBuilder sb = new StringBuilder();
-            int bit = 0;
-            while ((1 << (bit + 1)) <= a - 1) bit++;
-            for (int i = (1 << bit) - 1; i >= 0; i--) {
-                sb.append(i).append(" ");
+        public int solve(int[] chs) {
+            if (chs[0] == chs[1] || chs[2] == 1)
+                return f(chs[1], chs[2]);
+            int k = chs[1] / chs[2];
+            int y = k * chs[2];
+            int res = 0;
+            if (y - 1 >= chs[0]) {
+                res = Math.max(res, f(y - 1, chs[2]));
             }
-            for (int i = (1 << bit); i < a; i++) {
-                sb.append(i).append(" ");
+            if (y >= chs[0]) {
+                res = Math.max(res, f(y, chs[2]));
             }
-            return sb.toString();
+            if (chs[1] - 1 >= chs[0]) {
+                res = Math.max(res, f(chs[1] - 1, chs[2]));
+            }
+            if (chs[1] >= chs[0]) {
+                res = Math.max(res, f(chs[1], chs[2]));
+            }
+            return res;
+        }
+
+        private int f(int ch, int ch1) {
+            O.debug(S.string(ch + " " + ch1));
+            return ch / ch1 + ch % ch1;
         }
     }
 
@@ -39,7 +50,7 @@ public class Solution {
         int t = inputInt(br);
         StringBuilder sb = new StringBuilder();
         while (t-- > 0) {
-            sb.append(new Result().solve(inputInt(br))).append("\n");
+            sb.append(new Result().solve(inputIntArray(br))).append("\n");
         }
         System.out.println(sb);
     }
